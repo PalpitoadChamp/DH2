@@ -108,10 +108,77 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		name: "Gulp Cannon",
 		shortDesc: "When hit after Surf/Dive, attacker takes 1/4 max HP and -1 Sp. Defense or poison.",
 	},
+	tacticalmonarch: {
+		onStart(pokemon) {
+			if (pokemon.monarch) return;
+			for (const target of pokemon.foes()) {
+				for (const moveSlot of target.moveSlots) {
+					const move = this.dex.moves.get(moveSlot.move);
+					if (move.category === 'Status') continue;
+					const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
+					if (
+						this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
+						move.ohko
+					) {
+						this.add('-ability', pokemon, 'Tactical Monarch');
+						pokemon.monarch = true;
+						pokemon.switchFlag = true;
+					}
+				}
+			}
+		},
+		onFoeSwitchIn(target) {
+			if (pokemon.monarch) return;
+			const pokemon = this.effectState.target;
+			for (const moveSlot of target.moveSlots) {
+				const move = this.dex.moves.get(moveSlot.move);
+				if (move.category === 'Status') continue;
+				const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
+				if (
+						this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
+						move.ohko
+					) {
+						this.add('-ability', pokemon, 'Tactical Monarch');
+						pokemon.monarch = true;
+						pokemon.switchFlag = true;
+					}
+			}
+		},
+		name: "Tactical Monarch",
+		shortDesc: "On switchin, or when the opponent switches in, switches out if the opponent has a supereffective move. Once per battle.",
+	},
+	bombardier: {
+		shortDesc: "This Pokemon's ball and bomb moves have 1.5x power.",
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (move.flags['bullet']) {
+				return this.chainModify(1.5);
+			}
+		},
+		name: "Bombardier",
+	},
 
 	//buffed
 	keeneye: {
 		inherit: true,
+		onDamage(damage, target, source, effect) {
+			if (effect && ['stealthrock', 'spikes'].includes(effect.id)) {
+				return false;
+			}
+		},
+		onSetStatus(status, target, source, effect) {
+			if (effect.id !== 'toxicspikes' && status.id !== 'psn' && status.id !== 'tox') return;
+			return false;
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (effect.id !== 'stickyweb') return;
+			let i: BoostID;
+			for (i in boost) {
+				if (boost[i]! < 0) {
+					delete boost[i];
+				}
+			}
+		},
 		shortDesc: "This Pokemon's accuracy can't be lowered by others; ignores their evasiveness stat, immune to hazards.",
 	},
 	suctioncups: {
@@ -123,7 +190,7 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 			}
 
 			const dazzlingHolder = this.effectState.target;
-			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && move.forceSwitch) {
+			if ((source.isAlly(dazzlingHolder) || move.target === 'all') && (move.forceSwitch || move.selfSwitch)) {
 				this.attrLastMove('[still]');
 				this.add('cant', dazzlingHolder, 'ability: Suction Cups', move, '[of] ' + target);
 				return false;
@@ -131,10 +198,6 @@ export const Abilities: {[abilityid: string]: AbilityData} = {
 		},
 	},
 	//keen eye buff implemented in moves.ts
-	
-	
-	
-	
 	
 	//loria abilities just in case
 	// Wind Blaster could need testing.

@@ -395,7 +395,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		num: -528,
 		name: "Tigrissle",
 		types: ["Bug", "Water"],
-		baseStats: {hp: 25, atk: 40, def: 40, spa: 30, spd: 25, spe: 60},
+		baseStats: {hp: 34, atk: 55, def: 45, spa: 45, spd: 30, spe: 60},
 		abilities: {0: "Battle Armor", 1: "Compound Eyes", H: "Swift Swim"},
 		heightm: 0.6,
 		weightkg: 4.4,
@@ -407,7 +407,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		num: -529,
 		name: "Beedive",
 		types: ["Bug", "Water"],
-		baseStats: {hp: 55, atk: 75, def: 80, spa: 65, spd: 70, spe: 80},
+		baseStats: {hp: 54, atk: 85, def: 90, spa: 75, spd: 70, spe: 80},
 		abilities: {0: "Battle Armor", 1: "Compound Eyes", H: "Swift Swim"},
 		heightm: 1.0,
 		weightkg: 20.0,
@@ -1192,7 +1192,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		types: ["Poison", "Ice"],
 		gender: "N",
 		baseStats: {hp: 127, atk: 41, def: 67, spa: 97, spd: 179, spe: 59},
-		abilities: {0: "Beast Boost"},
+		abilities: {0: "Beast Boost", H: "Simple"},
 		heightm: 0.3,
 		weightkg: 2.2,
 		color: "Pink",
@@ -1205,7 +1205,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		types: ["Fire", "Ice"],
 		gender: "N",
 		baseStats: {hp: 81, atk: 83, def: 77, spa: 99, spd: 111, spe: 119},
-		abilities: {0: "Protosynthesis"},
+		abilities: {0: "Protosynthesis", H: "Snow Cloak"},
 		heightm: 1.7,
 		weightkg: 29.9,
 		color: "White",
@@ -1215,10 +1215,10 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	orbiterunit: {
 		num: -584,
 		name: "Orbiter Unit",
-		types: ["Psychic", "Steel"],
+		types: ["Psychic", "Bug"],
 		gender: "N",
 		baseStats: {hp: 84, atk: 90, def: 102, spa: 100, spd: 102, spe: 92},
-		abilities: {0: "Quark Drive"},
+		abilities: {0: "Quark Drive", H: "Magic Guard"},
 		heightm: 1.4,
 		weightkg: 56.0,
 		color: "Green",
@@ -1278,6 +1278,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		abilities: {0: "Flash Fire", 1: "Anger Point", H: "Sheer Force"},
 		heightm: 1.4,
 		weightkg: 88.8,
+		gender: "M",
 		color: "Red",
 		eggGroups: ["Field"],
 	},
@@ -1291,6 +1292,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		abilities: {0: "Thick Fat", 1: "Flame Body", H: "Scrappy"},
 		heightm: 1.2,
 		weightkg: 77.7,
+		gender: "F",
 		color: "Red",
 		eggGroups: ["Field"],
 	},
@@ -1617,6 +1619,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		abilities: {0: "Filter"},
 		heightm: 1.8,
 		weightkg: 55.5,
+		gender: "F",
 		color: "White",
 		eggGroups: ["Fairy", "Amorphous"],
 		requiredItem: "Alcremite",
@@ -1631,6 +1634,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		abilities: {0: "Prankster"},
 		heightm: 1.4,
 		weightkg: 36.8,
+		gender: "F",
 		color: "White",
 		eggGroups: ["Fairy", "Mineral"],
 		requiredItem: "Froslassite",
@@ -1740,6 +1744,19 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Swarm", H: "Anger Point"},
 	},
+	meowth: {
+		inherit: true,
+		abilities: {0: "Pickup", 1: "Technician", H: "Super Luck"},
+	},
+	persian: {
+		inherit: true,
+		abilities: {0: "Limber", 1: "Technician", H: "Super Luck"},
+	},
+	arcaninehisui: {
+		inherit: true,
+		baseStats: {hp: 100, atk: 120, def: 80, spa: 90, spd: 80, spe: 85},
+		color: "Orange",
+	},
 	oddish: {
 		inherit: true,
 		abilities: {0: "Night Walker", H: "Run Away"},
@@ -1751,11 +1768,6 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	vileplume: {
 		inherit: true,
 		abilities: {0: "Night Walker", H: "Effect Spore"},
-	},
-	arcaninehisui: {
-		inherit: true,
-		baseStats: {hp: 100, atk: 120, def: 80, spa: 90, spd: 80, spe: 85},
-		color: "Orange",
 	},
 	geodude: {
 		inherit: true,
@@ -1784,6 +1796,10 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	slowbrogalar: {
 		inherit: true,
 		abilities: {0: "Sniper", 1: "Own Tempo", H: "Regenerator"},
+	},
+	farfetchdgalar: {
+		inherit: true,
+		abilities: {0: "Steadfast", 1: "Big Pecks", H: "Scrappy"},
 	},
 	gastly: {
 		inherit: true,
@@ -1915,6 +1931,10 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		inherit: true,
 		baseStats: {hp: 55, atk: 45, def: 25, spa: 25, spd: 45, spe: 15},
 	},
+	bellossom: {
+		inherit: true,
+		abilities: {0: "Chlorophyll", H: "Hospitality"},
+	},
 	umbreon: {
 		inherit: true,
 		abilities: {0: "Synchronize", H: "Night Walker"},
@@ -1967,6 +1987,10 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Magma Armor", 1: "Flame Body", H: "Drought"},
 	},
+	corsola: {
+		inherit: true,
+		abilities: {0: "Healer", 1: "Natural Cure", H: "Regenerator"},
+	},
 	corsolagalar: {
 		inherit: true,
 		types: ["Ghost", "Rock"],
@@ -2008,6 +2032,10 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	dustox: {
 		inherit: true,
 		baseStats: {hp: 60, atk: 50, def: 70, spa: 50, spd: 100, spe: 65},
+	},
+	swellow: {
+		inherit: true,
+		baseStats: {hp: 60, atk: 85, def: 60, spa: 50, spd: 50, spe: 125},
 	},
 	seedot: {
 		inherit: true,
@@ -2146,7 +2174,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	},
 	rayquazamega: {
 		inherit: true,
-		baseStats: {hp: 100, atk: 180, def: 90, spa: 180, spd: 90, spe: 90},
+		baseStats: {hp: 100, atk: 180, def: 90, spa: 180, spd: 90, spe: 110},
 		requiredItem: "Meteorite",
 	},
 	deoxys: {
@@ -2452,6 +2480,10 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		requiredAbility: "Rage Mode",
 		battleOnly: "Darmanitan-Galar",
 	},
+	maractus: {
+		inherit: true,
+		abilities: {0: "Water Absorb", 1: "Chlorophyll", H: "Dancer"},
+	},
 	zoruahisui: {
 		inherit: true,
 		types: ["Ghost", "Normal"],
@@ -2582,6 +2614,10 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Justified", H: "Scrappy"},
 	},
+	keldeoresolute: {
+		inherit: true,
+		abilities: {0: "Justified", H: "Scrappy"},
+	},
 	meloettapirouette: {
 		num: 648,
 		name: "Meloetta-Pirouette",
@@ -2600,6 +2636,14 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	greninja: {
 		inherit: true,
 		abilities: {0: "Torrent", H: "Protean"},
+	},
+	florges: {
+		inherit: true,
+		baseStats: {hp: 74, atk: 65, def: 68, spa: 112, spd: 154, spe: 72},
+	},
+	furfrou: {
+		inherit: true,
+		abilities: {0: "Fur Coat", H: "Majesty"},
 	},
 	espurr: {
 		inherit: true,
@@ -2620,10 +2664,6 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	aromatisse: {
 		inherit: true,
 		abilities: {0: "Healer", 1: "Aroma Veil", H: "Misty Surge"},
-	},
-	furfrou: {
-		inherit: true,
-		abilities: {0: "Fur Coat", H: "Majesty"},
 	},
 	doublade: {
 		inherit: true,
@@ -2655,6 +2695,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	},
 	sliggoohisui: {
 		inherit: true,
+		types: ["Dragon", "Steel"],
 		abilities: {0: "Liquid Ooze", 1: "Shell Armor", H: "Gooey"},
 	},
 	goodra: {
@@ -2663,6 +2704,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	},
 	goodrahisui: {
 		inherit: true,
+		types: ["Dragon", "Steel"],
 		abilities: {0: "Liquid Ooze", 1: "Shell Armor", H: "Gooey"},
 	},
 	pumpkaboosmall: {
@@ -2911,6 +2953,10 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		inherit: true,
 		abilities: {0: "Steam Engine", 1: "Flame Body", H: "Heat Sink"},
 	},
+	applin: {
+		inherit: true,
+		abilities: {0: "Ripen", 1: "Gluttony", H: "Overcoat"},
+	},
 	arrokuda: {
 		inherit: true,
 		abilities: {0: "Swift Swim", H: "Against Current"},
@@ -2958,11 +3004,16 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	perrserker: {
 		inherit: true,
 		abilities: {0: "Battle Armor", 1: "Tough Claws", H: "Iron Barbs"},
+		baseStats: {hp: 65, atk: 110, def: 100, spa: 50, spd: 65, spe: 50},
 	},
 	cursola: {
 		inherit: true,
 		types: ["Ghost", "Rock"],
 		abilities: {0: "Weak Armor", H: "Cursed Body"},
+	},
+	sirfetchd: {
+		inherit: true,
+		abilities: {0: "Steadfast", 1: "Justified", H: "Scrappy"},
 	},
 	mrrime: {
 		inherit: true,
@@ -3008,6 +3059,10 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	zamazentacrowned: {
 		inherit: true,
 		baseStats: {hp: 92, atk: 110, def: 145, spa: 80, spd: 145, spe: 108},
+	},
+	eternatus: {
+		inherit: true,
+		baseStats: {hp: 140, atk: 90, def: 100, spa: 145, spd: 100, spe: 115},
 	},
 	kubfu: {
 		inherit: true,
@@ -3077,7 +3132,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		num: 901,
 		name: "Ursaluna",
 		types: ["Normal", "Ground"],
-		baseStats: {hp: 120, atk: 140, def: 105, spa: 45, spd: 75, spe: 55},
+		baseStats: {hp: 125, atk: 140, def: 105, spa: 45, spd: 75, spe: 55},
 		abilities: {0: "Guts", 1: "Overcoat", H: "Unnerve"},
 		heightm: 2.4,
 		weightkg: 290,
@@ -3284,7 +3339,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	},
 	kingambit: {
 		inherit: true,
-		baseStats: {hp: 100, atk: 125, def: 120, spa: 60, spd: 85, spe: 50},
+		baseStats: {hp: 100, atk: 135, def: 120, spa: 60, spd: 80, spe: 50},
 		abilities: {0: "Defiant", 1: "Sharpness", H: "Pressure"},
 	},
 	arctibax: {
@@ -3298,14 +3353,24 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	gholdengo: {
 		inherit: true,
 		types: ["Ghost", "Steel"],
+		exclusiveHidden: true,
 	},
 	dipplin: {
 		inherit: true,
 		abilities: {0: "Sweet Veil", 1: "Gluttony", H: "Sticky Hold"},
 	},
+	okidogi: {
+		inherit: true,
+		tags: ['Sub-Legendary'],
+	},
+	munkidori: {
+		inherit: true,
+		tags: ['Sub-Legendary'],
+	},
 	fezandipiti: {
 		inherit: true,
 		abilities: {0: "Toxic Chain", H: "Levitate"},
+		tags: ['Sub-Legendary'],
 	},
 	ogerpon: {
 		num: 1017,
@@ -3319,6 +3384,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		weightkg: 39.8,
 		color: "Green",
 		eggGroups: ["Undiscovered"],
+		tags: ['Sub-Legendary'],
 		otherFormes: ["Ogerpon-Wellspring", "Ogerpon-Hearthflame", "Ogerpon-Cornerstone"],
 		formeOrder: ["Ogerpon", "Ogerpon-Wellspring", "Ogerpon-Hearthflame", "Ogerpon-Cornerstone"],
 	},
@@ -3335,6 +3401,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		weightkg: 39.8,
 		color: "Green",
 		eggGroups: ["Undiscovered"],
+		tags: ['Sub-Legendary'],
 		requiredItem: "Wellspring Mask",
 		changesFrom: "Ogerpon",
 		exclusiveHidden: true,
@@ -3352,6 +3419,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		weightkg: 39.8,
 		color: "Red",
 		eggGroups: ["Undiscovered"],
+		tags: ['Sub-Legendary'],
 		requiredItem: "Hearthflame Mask",
 		changesFrom: "Ogerpon",
 		exclusiveHidden: true,
@@ -3369,6 +3437,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		weightkg: 39.8,
 		color: "Gray",
 		eggGroups: ["Undiscovered"],
+		tags: ['Sub-Legendary'],
 		requiredItem: "Cornerstone Mask",
 		changesFrom: "Ogerpon",
 		exclusiveHidden: true,
@@ -3758,6 +3827,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	},
 	dedenne: {
 		inherit: true,
+		abilities: {0: "Cheek Pouch", 1: "Pickup", H: "Induction"}, //hardcoding because for some stupid reason it's not registering despite the algorithm literally changing it
 		color: "Orange",
 	},
 	xerneas: {
@@ -4113,12 +4183,13 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	brattler: {
 		inherit: true,
 		number: -33,
-	},
+	},*/
 	malaconda: {
 		inherit: true,
-		number: -34,
+		//number: -34,
+		abilities: {0: "Harvest", 1: "Shed Skin", H: "Infiltrator"},
 	},
-	cawdet: {
+	/*cawdet: {
 		inherit: true,
 		number: -35,
 	},
@@ -4243,4 +4314,16 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		inherit: true,
 		number: -65,
 	},*/
+	ababo: {
+		inherit: true,
+		abilities: {0: "Own Tempo", 1: "Rattled", H: "Pixilate"},
+	},
+	scattervein: {
+		inherit: true,
+		abilities: {0: "Own Tempo", 1: "Unnerve", H: "Pixilate"},
+	},
+	hemogoblin: {
+		inherit: true,
+		abilities: {0: "Heat Sink", 1: "Unnerve", H: "Pixilate"},
+	},
 };

@@ -144,7 +144,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		num: -7,
 		accuracy: 100,
 		basePower: 70,
-		category: "Physical",
+		category: "Special",
 		name: "Frost Feint",
 		shortDesc: "User switches out after damaging the target.",
 		pp: 20,
@@ -152,7 +152,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		flags: {contact: 1, protect: 1, mirror: 1},
 		onPrepareHit: function(target, source, move) {
 			this.attrLastMove('[still]');
-			this.add('-anim', source, "Ice Spinner", target);
+			this.add('-anim', source, "Aurora Beam", target);
 		},
 		selfSwitch: true,
 		secondary: null,
@@ -317,12 +317,12 @@ export const Moves: {[moveid: string]: MoveData} = {
 		type: "Steel",
 		contestType: "Cool",
 	},
-	dragonfang: {
+	draconicfang: {
 		num: -15,
 		accuracy: 100,
 		basePower: 90,
 		category: "Physical",
-		name: "Dragon Fang",
+		name: "Draconic Fang",
 		shortDesc: "30% chance to burn the target.",
 		pp: 15,
 		priority: 0,
@@ -452,7 +452,10 @@ export const Moves: {[moveid: string]: MoveData} = {
 				return 5;
 			}
 		},
-		secondary: null,
+		secondary: {
+			chance: 30,
+			status: 'tox',
+		},
 		target: "normal",
 		type: "Poison",
 		contestType: "Beautiful",
@@ -678,8 +681,79 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Normal",
 	},
+	venommist: {
+		accuracy: 90,
+		basePower: 0,
+		category: "Status",
+		name: "Venom Mist",
+		shortDesc: "Raises the user's Atk by 1. Poisons all other Pokémon on the field.",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, reflectable: 1, mirror: 1},
+		onPrepareHit: function(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Haze", target);
+		},
+		status: 'psn',
+		secondary: null,
+		target: "allAdjacent",
+		self: {
+			boosts: {
+				atk: 1,
+			}
+		},
+		type: "Poison",
+		contestType: "Clever",
+	},
+	stingspit: {
+		accuracy: 100,
+		basePower: 50,
+		category: "Special",
+		name: "Sting Spit",
+		shortDesc: "Hits twice. Doubles: Tries to hit each foe once. Each hit has a 50% chance to Poison the target.",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, noparentalbond: 1},
+		onPrepareHit: function(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Dragon Darts", target);
+		},
+		multihit: 2,
+		smartTarget: true,
+		secondary: null,
+		target: "normal",
+		type: "Bug",
+		maxMove: {basePower: 130},
+	},
+	acidtrip: {
+		accuracy: 100,
+		basePower: 0,
+		category: "Status",
+		name: "Acid Trip",
+		shortDesc: "User loses 1/8 max HP. +2 SpA, +1 Def.",
+		pp: 5,
+		priority: 0,
+		flags: {snatch: 1},
+		onTry(source) {
+			if (source.hp <= (source.maxhp * 1/8) || source.maxhp === 1) return false;
+		},
+		onTryHit(pokemon, target, move) {
+			if (!this.boost(move.boosts as SparseBoostsTable)) return null;
+			delete move.boosts;
+		},
+		onHit(pokemon) {
+			this.directDamage(pokemon.maxhp * 1/8);
+		},
+		boosts: {
+			def: 1,
+			spa: 2,
+		},
+		secondary: null,
+		target: "self",
+		type: "Poison",
+	},
 	voraciousfang: {
-		num: -15,
+		num: -25,
 		accuracy: 100,
 		basePower: 80,
 		category: "Physical",
@@ -699,6 +773,30 @@ export const Moves: {[moveid: string]: MoveData} = {
 		target: "normal",
 		type: "Dragon",
 		contestType: "Tough",
+	},
+	royalpunt: {
+		num: -26,
+		accuracy: 100,
+		basePower: 70,
+		category: "Physical",
+		name: "Royal Punt",
+		shortDesc: "100% chance to lower the target's Defense by 1.",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1},
+		onPrepareHit: function(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Spin Out", target);
+		},
+		secondary: {
+			chance: 100,
+			boosts: {
+				def: -1,
+			},
+		},
+		target: "normal",
+		type: "Steel",
+		contestType: "Cool",
 	},
 
 	//loria moves just in case
@@ -1222,7 +1320,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 		accuracy: true,
 		basePower: 0,
 		category: "Status",
-		shortDesc: "Protects the user. If hit by a contact move, the attacker loses 25% of thier max HP and gets poisoned.",
+		shortDesc: "Protects the user. If hit by a contact move, the attacker loses 25% of their max HP and gets poisoned.",
 		isViable: true,
 		name: "Toxic Snowball",
 		pp: 10,
@@ -1656,7 +1754,7 @@ export const Moves: {[moveid: string]: MoveData} = {
 	fireworkleaf: {
 		accuracy: 100,
 		basePower: 70,
-		category: "Special",
+		category: "Physical",
     	shortDesc: "Super effective against Steel-types.",
 		isViable: true,
 		name: "Firework Leaf",
