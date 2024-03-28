@@ -171,4 +171,70 @@ export const Pokedex: {[k: string]: ModdedSpeciesData} = {
 		baseStats: {hp: 86, atk: 110, def: 101, spa: 125, spd: 101, spe: 77},
 		abilities: {0: "Divine Idol", 1: "Flash Fire", H: "Flame Body"},
 	},
+	serperior: {
+		inherit: true,
+		prevo: null,
+	},
+	whimsicott: {
+		inherit: true,
+		baseStats: {hp: 70, atk: 67, def: 85, spa: 110, spd: 75, spe: 116},
+		abilities: {0: "Chlorophyll", H: "Prankster"},
+		prevo: null,
+	},
+	sigilyph: {
+		inherit: true,
+		baseStats: {hp: 87, atk: 58, def: 90, spa: 103, spd: 90, spe: 97},
+		abilities: {0: "Wonder Skin", H: "Magic Guard"},
+	},
+	cofagrigus: {
+		inherit: true,
+		baseStats: {hp: 58, atk: 50, def: 155, spa: 105, spd: 85, spe: 30},
+		abilities: {0: "Mummy", H: "Sticky Hold"},
+	},
+	vanilluxe: {
+		inherit: true,
+		baseStats: {hp: 71, atk: 70, def: 85, spa: 125, spd: 95, spe: 89},
+		abilities: {0: "Cold Sweat"},
+	},
+	volcarona: {
+		inherit: true,
+		prevo: null,
+	},
+	diggersby: {
+		inherit: true,
+		baseStats: {hp: 87, atk: 56, def: 97, spa: 50, spd: 87, spe: 78},
+		abilities: {0: "Pickup", H: "Huge Power"},
+	},
+	pancham: {
+		inherit: true,
+		types: ["Fighting", "Dark"],
+		baseStats: {hp: 90, atk: 100, def: 70, spa: 55, spd: 70, spe: 72},
+	},
+	aegislash: {
+		inherit: true,
+		baseStats: {hp: 60, atk: 40, def: 140, spa: 40, spd: 140, spe: 60},
+		prevo: null,
+	},
+	aegislashblade: {
+		inherit: true,
+		baseStats: {hp: 60, atk: 130, def: 50, spa: 130, spd: 50, spe: 60},
+		prevo: null,
+	},
+	dragalge: {
+		inherit: true,
+		baseStats: {hp: 79, atk: 75, def: 90, spa: 97, spd: 123, spe: 44},
+	},
+	sylveon: {
+		inherit: true,
+		abilities: {0: "Cute Charm", H: "Pixelgreat"},
+	},
+	goodra: {
+		inherit: true,
+		baseStats: {hp: 90, atk: 105, def: 70, spa: 115, spd: 140, spe: 80},
+		abilities: {0: "Sap Sipper", 1: "Gooey", H: "Neuroforce"},
+	},
+	volcanion: {
+		inherit: true,
+		baseStats: {hp: 85, atk: 70, def: 100, spa: 110, spd: 90, spe: 80},
+	},
 };

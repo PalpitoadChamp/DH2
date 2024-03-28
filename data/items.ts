@@ -290,6 +290,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 104,
 		gen: 4,
+		rating: 0,
 		isNonstandard: "Past",
 	},
 	aspearberry: {
@@ -326,7 +327,8 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onDisableMove(pokemon) {
 			for (const moveSlot of pokemon.moveSlots) {
-				if (this.dex.moves.get(moveSlot.move).category === 'Status') {
+				const move = this.dex.moves.get(moveSlot.id);
+				if (move.category === 'Status' && move.id !== 'mefirst') {
 					pokemon.disableMove(moveSlot.id);
 				}
 			}
@@ -458,7 +460,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1111,
 		gen: 8,
-		isNonstandard: "Past",
+		rating: 0,
 	},
 	bignugget: {
 		name: "Big Nugget",
@@ -1067,7 +1069,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1112,
 		gen: 8,
-		isNonstandard: "Past",
 		rating: 0,
 	},
 	cobaberry: {
@@ -1455,7 +1456,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 235,
 		gen: 2,
-		isNonstandard: "Past",
 		rating: 0,
 	},
 	dragoniumz: {
@@ -1505,7 +1505,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 324,
 		gen: 4,
-		isNonstandard: "Past",
 		rating: 0,
 	},
 	durinberry: {
@@ -1632,7 +1631,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 322,
 		gen: 4,
-		isNonstandard: "Past",
 		rating: 0,
 	},
 	electricgem: {
@@ -1730,13 +1728,13 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		onModifyDefPriority: 2,
 		onModifyDef(def, pokemon) {
-			if (pokemon.baseSpecies.nfe || pokemon.baseSpecies.id === 'dipplin') {
+			if (pokemon.baseSpecies.nfe) {
 				return this.chainModify(1.5);
 			}
 		},
 		onModifySpDPriority: 2,
 		onModifySpD(spd, pokemon) {
-			if (pokemon.baseSpecies.nfe || pokemon.baseSpecies.id === 'dipplin') {
+			if (pokemon.baseSpecies.nfe) {
 				return this.chainModify(1.5);
 			}
 		},
@@ -1930,6 +1928,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 82,
 		gen: 1,
+		rating: 0,
 	},
 	firiumz: {
 		name: "Firium Z",
@@ -2019,7 +2018,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1113,
 		gen: 8,
-		isNonstandard: "Past",
 		rating: 0,
 	},
 	flyinggem: {
@@ -3258,7 +3256,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1110,
 		gen: 8,
-		isNonstandard: "Past",
 		rating: 0,
 	},
 	lucarionite: {
@@ -3427,7 +3424,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 323,
 		gen: 4,
-		isNonstandard: "Past",
 		rating: 0,
 	},
 	magnet: {
@@ -3668,6 +3664,12 @@ export const Items: {[itemid: string]: ItemData} = {
 		num: 758,
 		gen: 6,
 		isNonstandard: "Past",
+	},
+	metalalloy: {
+		name: "Metal Alloy",
+		spritenum: 761,
+		num: 2482,
+		gen: 9,
 	},
 	metalcoat: {
 		name: "Metal Coat",
@@ -4572,7 +4574,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 321,
 		gen: 4,
-		isNonstandard: "Past",
 		rating: 0,
 	},
 	psychicgem: {
@@ -4874,7 +4875,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1115,
 		gen: 8,
-		isNonstandard: "Past",
 		rating: 0,
 	},
 	rindoberry: {
@@ -5543,7 +5543,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		itemUser: ["Latios", "Latias"],
 		num: 225,
 		gen: 3,
-		isNonstandard: "Past",
 	},
 	spelltag: {
 		name: "Spell Tag",
@@ -5662,7 +5661,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1114,
 		gen: 8,
-		isNonstandard: "Past",
 		rating: 0,
 	},
 	steelixite: {
@@ -5795,7 +5793,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 1109,
 		gen: 8,
-		isNonstandard: "Past",
 		rating: 0,
 	},
 	sunstone: {
@@ -7060,7 +7057,6 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 252,
 		gen: 2,
-		isNonstandard: "Past",
 		rating: 0,
 	},
 	utilityumbrella: {
@@ -7167,6 +7163,7 @@ export const Items: {[itemid: string]: ItemData} = {
 		},
 		num: 84,
 		gen: 1,
+		rating: 0,
 	},
 	wateriumz: {
 		name: "Waterium Z",
