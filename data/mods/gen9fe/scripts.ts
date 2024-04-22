@@ -2,10 +2,35 @@ export const Scripts: ModdedBattleScriptsData = {
 	gen: 9,
 	teambuilderConfig: {
         excludeStandardTiers: true,
-        customTiers: ['FEOU', 'FEUU', 'FENFE', 'FELC'],
+        customTiers: ['FEOU', 'FEUUBL', 'FEUU', 'FENFE', 'FELC'],
 	},
 	actions: {
 		inherit: true,
+		terastallize(pokemon: Pokemon) {
+			if (pokemon.illusion?.species.baseSpecies === 'Ogerpon') {
+				this.battle.singleEvent('End', this.dex.abilities.get('Illusion'), pokemon.abilityState, pokemon);
+			}
+	
+			const type = pokemon.teraType;
+			this.battle.add('-terastallize', pokemon, type);
+			pokemon.terastallized = type;
+			for (const ally of pokemon.side.pokemon) {
+				ally.canTerastallize = null;
+			}
+			pokemon.addedType = '';
+			pokemon.knownType = true;
+			pokemon.apparentType = type;
+			pokemon.side.addSideCondition('teraused', pokemon);
+			if (pokemon.species.baseSpecies === 'Ogerpon') {
+				const tera = pokemon.species.id === 'ogerpon' ? 'tealtera' : 'tera';
+				pokemon.formeChange(pokemon.species.id + tera, null, true);
+			}
+			if (pokemon.species.baseSpecies === 'Hattepon') {
+				const tera = pokemon.species.id === 'hattepon' ? 'basetera' : 'tera';
+				pokemon.formeChange(pokemon.species.id + tera, null, true);
+			}
+			this.battle.runEvent('AfterTerastallization', pokemon);
+		},
 		canMegaEvo(pokemon) {
 			const altForme = pokemon.baseSpecies.otherFormes && this.dex.species.get(pokemon.baseSpecies.otherFormes[0]);
 			const item = pokemon.getItem();
@@ -43,6 +68,16 @@ export const Scripts: ModdedBattleScriptsData = {
 				case "Chomptry":
 					if (item.name === "Garchompite") {
 						return "Chomptry-Mega";
+					}
+					break;
+				case "Tentazor":
+					if (item.name === "Scizorite") {
+						return "Tentazor-Mega";
+					}
+					break;
+				case "Aerodirge":
+					if (item.name === "Aerodactylite") {
+						return "Aerodirge-Mega";
 					}
 					break;
 			}
@@ -500,7 +535,7 @@ export const Scripts: ModdedBattleScriptsData = {
 			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 			if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
 			if (
-				(this.hasAbility(['levitate', 'holygrail', 'risingtension', 'freeflight', 'airbornearmor', 'hellkite','honeymoon','aircontrol'])) &&
+				(this.hasAbility(['levitate', 'holygrail', 'risingtension', 'freeflight', 'airbornearmor', 'hellkite','honeymoon','aircontrol','magnetize'])) &&
 				!this.battle.suppressingAbility(this)
 			) return null;
 			if ('magnetrise' in this.volatiles/*) return false;

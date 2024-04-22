@@ -6,7 +6,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 75,
 	},
 	varantis: {
-		tier: "FEOU",
+		tier: "FEUUBL",
 		doublesTier: "NFE",
 		randomBattleMoves: ["ironhead", "leafblade", "gunkshot", "partingshot"],
 		randomBattleLevel: 78,
@@ -638,6 +638,74 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "FEUU",
 		doublesTier: "DOU",
 	},
+	magnegiri: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	celeblim: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	tentazor: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	tentazormega: {
+		tier: "FEUUBL",
+		doublesTier: "DOU",
+	},
+	golegonalola: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	maractorustherian: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	necroqueen: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	mrheat: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	hattepon: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	hatteponwellspring: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	hatteponhearthflame: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	hatteponcornerstone: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	buzzscor: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	sirbundle: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	hydrapao: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	aerodirge: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	aerodirgemega: {
+		tier: "FEUUBL",
+		doublesTier: "DOU",
+	},
 
 	larvix: {
 		tier: "FELC",
@@ -709,6 +777,18 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	kabeepy: {
 		tier: "FELC",
+		doublesTier: "DOU",
+	},
+	tentather: {
+		tier: "FENFE",
+		doublesTier: "DOU",
+	},
+	geopinchalola: {
+		tier: "FELC",
+		doublesTier: "DOU",
+	},
+	vibraveleralola: {
+		tier: "FENFE",
 		doublesTier: "DOU",
 	},
 };

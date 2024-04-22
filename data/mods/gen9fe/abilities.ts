@@ -287,7 +287,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onTryBoost(boost, target, source, effect) {
-			if (['Intimidate','Mad Cow','Forest Fury','Shock Factor'].includes(effect.name) && boost.atk) {
+			if (['Intimidate','Mad Cow','Forest Fury','Shock Factor','Daunting Storm'].includes(effect.name) && boost.atk) {
 				delete boost.atk;
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Scrap Rock', '[of] ' + target);
 			} else if (effect.name === 'Fishy Threat' && boost.spe) {
@@ -651,7 +651,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onTryBoost(boost, target, source, effect) {
-			if (['Intimidate','Mad Cow','Forest Fury','Shock Factor'].includes(effect.name) && boost.atk) {
+			if (['Intimidate','Mad Cow','Forest Fury','Shock Factor','Daunting Storm'].includes(effect.name) && boost.atk) {
 				delete boost.atk;
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Primitive', '[of] ' + target);
 			} else if (effect.name === 'Fishy Threat' && boost.spe) {
@@ -841,7 +841,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		rating: 1,
 	},
 	madcow: {
-	  shortDesc: "Emergency Exit + Intimidate. Intimidate also activates alongside Emergency Exit.",
+	  shortDesc: "On switch-in, or when this Pokemon is lowered to 50% max HP, the foe's Attack is lowered by 1 stage.",
 		onStart(pokemon) {
 			let activated = false;
 			for (const target of pokemon.adjacentFoes()) {
@@ -871,7 +871,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 					this.boost({atk: -1}, pokemon, target, null, true);
 				}
 			}
-			target.switchFlag = true;
+			target.switchFlag = false;
 		},
 		flags: {},
 		name: "Mad Cow",
@@ -2088,7 +2088,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			return critRatio + 1;
 		},
 		onTryBoost(boost, target, source, effect) {
-			if (['Intimidate','Mad Cow','Forest Fury','Shock Factor'].includes(effect.name) && boost.atk) {
+			if (['Intimidate','Mad Cow','Forest Fury','Shock Factor','Daunting Storm'].includes(effect.name) && boost.atk) {
 				delete boost.atk;
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Own Luck', '[of] ' + target);
 			} else if (effect.name === 'Fishy Threat' && boost.spe) {
@@ -2776,7 +2776,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onTryBoost(boost, target, source, effect) {
-			if (['Intimidate','Mad Cow','Forest Fury','Shock Factor'].includes(effect.name) && boost.atk) {
+			if (['Intimidate','Mad Cow','Forest Fury','Shock Factor','Daunting Storm'].includes(effect.name) && boost.atk) {
 				delete boost.atk;
 				this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Feisty Tempo', '[of] ' + target);
 			} else if (effect.name === 'Fishy Threat' && boost.spe) {
@@ -3207,7 +3207,13 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	emperorsclothes: {
 		shortDesc: "Deal 10% bonus damage for each hit taken (up to 50%)",
 		onStart(pokemon) {
-			this.effectState.fallen = 0;
+			let attacked = pokemon.timesAttacked;
+			if (attacked > 0) {
+				this.effectState.fallen = attacked > 5 ? 5 : attacked;
+				this.add('-start', pokemon, `fallen${this.effectState.fallen}`, '[silent]');
+			} else {
+				this.effectState.fallen = 0;
+			}
 		},
 		onDamagingHit(damage, target, source, move) {
 			if (this.effectState.fallen >= 5) return;
@@ -3265,7 +3271,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			this.boost(boost, pokemon, pokemon);
 		},
 		onTryBoost(boost, target, source, effect) {
-			if (['Intimidate','Mad Cow','Forest Fury','Shock Factor'].includes(effect.name)) {
+			if (['Intimidate','Mad Cow','Forest Fury','Shock Factor','Daunting Storm'].includes(effect.name)) {
 				if (boost.atk) {
 					delete boost.atk;
 					this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Inner Mood', '[of] ' + target);
@@ -3298,12 +3304,452 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		flags: {breakable: 1},
 		name: "No Nonsense",
 	},
+	magneticstorm: {
+		shortDesc: "Magnet Pull + Storm Drain",
+		onFoeTrapPokemon(pokemon) {
+			if (pokemon.hasType('Steel') && pokemon.isAdjacent(this.effectState.target)) {
+				pokemon.tryTrap(true);
+			}
+		},
+		onFoeMaybeTrapPokemon(pokemon, source) {
+			if (!(source ||= this.effectState.target) || !pokemon.isAdjacent(source)) return;
+			if (!pokemon.knownType || pokemon.hasType('Steel')) {
+				pokemon.maybeTrapped = true;
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Water') {
+				if (!this.boost({spa: 1})) {
+					this.add('-immune', target, '[from] ability: Magnetic Storm');
+				}
+				return null;
+			}
+		},
+		onAnyRedirectTarget(target, source, source2, move) {
+			if (move.type !== 'Water' || move.flags['pledgecombo']) return;
+			const redirectTarget = ['randomNormal', 'adjacentFoe'].includes(move.target) ? 'normal' : move.target;
+			if (this.validTarget(this.effectState.target, source, redirectTarget)) {
+				if (move.smartTarget) move.smartTarget = false;
+				if (this.effectState.target !== target) {
+					this.add('-activate', this.effectState.target, 'ability: Magnetic Storm');
+				}
+				return this.effectState.target;
+			}
+		},
+		flags: {breakable: 1},
+		name: "Magnetic Storm",
+	},
+	ultraimpulse: {
+		shortDesc: "x1.5 to highest stat when burned; +1 upon landing a KO",
+		onStart(pokemon) {
+			this.effectState.bestStat = pokemon.getBestStat(true, true);
+		},
+		onBasePowerPriority: 19,
+		onBasePower(basePower, attacker, defender, move) {
+			const bestStat = this.effectState.bestStat;
+			if (['atk','spa'].includes(bestStat) && attacker.status === 'brn'
+				&& move.category === (bestStat === 'spa' ? 'Special' : 'Physical')) {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifyDefPriority: 6,
+		onModifyDef(def, pokemon) {
+			if (this.effectState.bestStat === 'def' && pokemon.status === 'brn') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpDPriority: 6,
+		onModifySpD(spd, pokemon) {
+			if (this.effectState.bestStat === 'spd' && pokemon.status === 'brn') {
+				return this.chainModify(1.5);
+			}
+		},
+		onModifySpe(spe, pokemon) {
+			if (this.effectState.bestStat === 'spe' && pokemon.status === 'brn') {
+				return this.chainModify(1.5);
+			}
+		},
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				this.boost({[this.effectState.bestStat]: length}, source);
+			}
+		},
+		flags: {},
+		name: "Ultra Impulse",
+	},
+	dauntingstorm: {
+		shortDesc: "Water Absorb + Intimidate",
+		onStart(pokemon) {
+			let activated = false;
+			for (const target of pokemon.adjacentFoes()) {
+				if (!activated) {
+					this.add('-ability', pokemon, 'Daunting Storm', 'boost');
+					activated = true;
+				}
+				if (target.volatiles['substitute']) {
+					this.add('-immune', target);
+				} else {
+					this.boost({atk: -1}, target, pokemon, null, true);
+				}
+			}
+		},
+		onTryHit(target, source, move) {
+			if (target !== source && move.type === 'Water') {
+				if (!this.heal(target.baseMaxhp / 4)) {
+					this.add('-immune', target, '[from] ability: Water Absorb');
+				}
+				return null;
+			}
+		},
+		flags: {breakable: 1},
+		name: "Daunting Storm",
+	},
+	magnetize: {
+		shortDesc: "Galvanize + Levitate",
+		//levitate's airborneness in scripts.ts/pokemon#IsGrounded()
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !(noModifyType.includes(move.id) || (move.isZ && move.category !== 'Status') || (move.name === 'Tera Blast' && pokemon.terastallized))) {
+				move.type = 'Electric';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		flags: {breakable: 1},
+		name: "Magnetize",
+	},
+	magneticforce: {
+		shortDesc: "Galvanize effects + Traps Electric-types.",
+		//levitate's airborneness in scripts.ts/pokemon#IsGrounded()
+		onFoeTrapPokemon(pokemon) {
+			if (pokemon.hasType('Electric') && pokemon.isAdjacent(this.effectState.target)) {
+				pokemon.tryTrap(true);
+			}
+		},
+		onFoeMaybeTrapPokemon(pokemon, source) {
+			if (!(source ||= this.effectState.target) || !pokemon.isAdjacent(source)) return;
+			if (!pokemon.knownType || pokemon.hasType('Electric')) {
+				pokemon.maybeTrapped = true;
+			}
+		},
+		onModifyTypePriority: -1,
+		onModifyType(move, pokemon) {
+			const noModifyType = [
+				'judgment', 'multiattack', 'naturalgift', 'revelationdance', 'technoblast', 'terrainpulse', 'weatherball',
+			];
+			if (move.type === 'Normal' && !(noModifyType.includes(move.id) || (move.isZ && move.category !== 'Status') || (move.name === 'Tera Blast' && pokemon.terastallized))) {
+				move.type = 'Electric';
+				move.typeChangerBoosted = this.effect;
+			}
+		},
+		onBasePowerPriority: 23,
+		onBasePower(basePower, pokemon, target, move) {
+			if (move.typeChangerBoosted === this.effect) return this.chainModify([4915, 4096]);
+		},
+		flags: {breakable: 1},
+		name: "Magnetic Force",
+	},
+	hydrotechnic: {
+		shortDesc: "Moves with <=60BP have x1.5 power and restore 6.25% of Max HP after use.",
+		onBasePowerPriority: 30,
+		onBasePower(basePower, attacker, defender, move) {
+			const basePowerAfterMultiplier = this.modify(basePower, this.event.modifier);
+			this.debug('Base Power: ' + basePowerAfterMultiplier);
+			if (basePowerAfterMultiplier <= 60) {
+				this.debug('Technician boost');
+				///uhhh let's hope this typeChangerBoosted hack works
+				move.typeChangerBoosted = this.effect;
+				return this.chainModify(1.5);
+			}
+		},
+		onSourceDamagingHit(damage, target, source, move) {
+			if (source && move.typeChangerBoosted === this.effect)
+				this.heal(source.baseMaxhp / 16, source, source);
+		},
+		flags: {},
+		name: "Hydrotechnic",
+	},
+	shearstrength: {
+		shortDesc: "Takes x0.75 damage from moves with secondaries.",
+		onSourceModifyDamage(damage, source, target, move) {
+			if (move.secondaries) {
+				this.debug('Shear Strength neutralize');
+				return this.chainModify(0.75);
+			}
+		},
+		flags: {},
+		name: "Shear Strength",
+	},
+	suppressivefire: {
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.getMoveHitData(move).typeMod > 0) {
+				this.debug('Filter neutralize');
+				return this.chainModify(0.75);
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (move && target.getMoveHitData(move).typeMod > 0) {
+				target.addVolatile('suppressivefire');
+			}
+		},
+		onEnd(pokemon) {
+			pokemon.removeVolatile('suppressivefire');
+		},
+		condition: {
+			noCopy: true, // doesn't get copied by Baton Pass
+			onStart(target) {
+				this.add('-start', target, 'ability: Suppressive Fire');
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, attacker, defender, move) {
+				if (move.type === 'Fire' && attacker.hasAbility('suppressivefire')) {
+					this.debug('Flash Fire boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(atk, attacker, defender, move) {
+				if (move.type === 'Fire' && attacker.hasAbility('suppressivefire')) {
+					this.debug('Flash Fire boost');
+					return this.chainModify(1.5);
+				}
+			},
+			onEnd(target) {
+				this.add('-end', target, 'ability: Suppressive Fire', '[silent]');
+			},
+		},
+		flags: {breakable: 1},
+		name: "Suppressive Fire",
+	},
+	innovate: {
+	  shortDesc: "Scrappy + Quark Drive.",
+		onModifyMovePriority: -5,
+		onModifyMove(move) {
+			if (!move.ignoreImmunity) move.ignoreImmunity = {};
+			if (move.ignoreImmunity !== true) {
+				move.ignoreImmunity['Fighting'] = true;
+				move.ignoreImmunity['Normal'] = true;
+			}
+		},
+		onTryBoost(boost, target, source, effect) {
+			if (['Intimidate','Mad Cow','Forest Fury','Shock Factor','Daunting Storm'].includes(effect.name)) {
+				if (boost.atk) {
+					delete boost.atk;
+					this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Innovate', '[of] ' + target);
+				}
+			} else if (effect.name === 'Fishy Threat' && boost.spe) {
+				delete boost.spe;
+				this.add('-fail', target, 'unboost', 'Speed', '[from] ability: Innovate', '[of] ' + target);
+			}
+		},
+		onStart(pokemon) {
+			this.singleEvent('TerrainChange', this.effect, this.effectState, pokemon);
+		},
+		onTerrainChange(pokemon) {
+			if (pokemon.transformed) return;
+			if (this.field.isTerrain('electricterrain')) {
+				pokemon.addVolatile('innovate');
+			} else if (!pokemon.volatiles['innovate']?.fromBooster) {
+				pokemon.removeVolatile('innovate');
+			}
+		},
+		onEnd(pokemon) {
+			delete pokemon.volatiles['innovate'];
+			this.add('-end', pokemon, 'Quark Drive', '[silent]');
+		},
+		condition: {
+			noCopy: true,
+			onStart(pokemon, source, effect) {
+				if (effect?.name === 'Booster Energy') {
+					this.effectState.fromBooster = true;
+					this.add('-activate', pokemon, 'ability: Innovate', '[fromitem]');
+				} else {
+					this.add('-activate', pokemon, 'ability: Innovate');
+				}
+				this.effectState.bestStat = pokemon.getBestStat(false, true);
+				this.add('-start', pokemon, 'quarkdrive' + this.effectState.bestStat);
+			},
+			onModifyAtkPriority: 5,
+			onModifyAtk(atk, pokemon) {
+				if (this.effectState.bestStat !== 'atk' || pokemon.ignoringAbility()) return;
+				this.debug('Quark Drive atk boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifyDefPriority: 6,
+			onModifyDef(def, pokemon) {
+				if (this.effectState.bestStat !== 'def' || pokemon.ignoringAbility()) return;
+				this.debug('Quark Drive def boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifySpAPriority: 5,
+			onModifySpA(spa, pokemon) {
+				if (this.effectState.bestStat !== 'spa' || pokemon.ignoringAbility()) return;
+				this.debug('Quark Drive spa boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifySpDPriority: 6,
+			onModifySpD(spd, pokemon) {
+				if (this.effectState.bestStat !== 'spd' || pokemon.ignoringAbility()) return;
+				this.debug('Quark Drive spd boost');
+				return this.chainModify([5325, 4096]);
+			},
+			onModifySpe(spe, pokemon) {
+				if (this.effectState.bestStat !== 'spe' || pokemon.ignoringAbility()) return;
+				for (const target of pokemon.foes()) {
+					if (target.hasAbility('dyschronometria')) {
+						this.debug('Dyschronometria negating spe boost');
+						return;
+					}
+				}
+				this.debug('Quark Drive spe boost');
+				return this.chainModify(1.5);
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Quark Drive');
+			},
+		},
+		flags: {breakable: 1, failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1},
+		name: "Innovate",
+		rating: 4,
+	},
+	numbskull: {
+	  shortDesc: "Unaware + Rock Head",
+		onDamage(damage, target, source, effect) {
+			if (effect.id === 'recoil') {
+				if (!this.activeMove) throw new Error("Battle.activeMove is null");
+				if (this.activeMove.id !== 'struggle') return null;
+			}
+		},
+		onAnyModifyBoost(boosts, pokemon) {
+			const unawareUser = this.effectState.target;
+			if (unawareUser === pokemon) return;
+			if (unawareUser === this.activePokemon) {
+				if (pokemon !== this.activeTarget) return;
+				boosts['def'] = 0;
+				boosts['spd'] = 0;
+				boosts['evasion'] = 0;
+			}
+			else if (pokemon === this.activePokemon && unawareUser === this.activeTarget) {
+				boosts['atk'] = 0;
+				boosts['def'] = 0;
+				boosts['spa'] = 0;
+				boosts['accuracy'] = 0;
+			}
+		},
+		flags: {breakable: 1},
+		name: "Numbskull",
+		rating: 3,
+	},
+	appleofruin: {
+	  shortDesc: "Pokemon without this ability have their evasion multiplied by 0.75x.",
+		onStart(pokemon) {
+			if (this.suppressingAbility(pokemon)) return;
+			this.add('-ability', pokemon, 'Apple of Ruin');
+		},
+		onSourceModifyAccuracyPriority: -1,
+		onSourceModifyAccuracy(accuracy) {
+			if (typeof accuracy !== 'number') return;
+			this.debug('compoundeyes - enhancing accuracy');
+			return this.chainModify([5120, 4096]);
+		},
+		flags: {},
+		name: "Apple of Ruin",
+		rating: 4,
+	},
+	bestboost: {
+	  shortDesc: "(Placeholder) This Pokemon's highest stat can't be lowered and rises 1 stage after KOing a foe.",
+		onSourceAfterFaint(length, target, source, effect) {
+			if (effect && effect.effectType === 'Move') {
+				const bestStat = source.getBestStat(true, true);
+				this.boost({[bestStat]: length}, source);
+			}
+		},
+		onTryBoost(boost, target, source, effect) {
+			const bestStat = target.getBestStat(true, true);
+			if (source && target === source) return;
+			if (boost.bestStat && boost.bestStat < 0) {
+				delete boost.bestStat;
+				if (!(effect as ActiveMove).secondaries) {
+					this.add("-fail", target, "unboost", bestStat, "[from] ability: Best Boost", "[of] " + target);
+				}
+			}
+		},
+		flags: {breakable: 1},
+		name: "Best Boost",
+		rating: 3.5,
+	},
+	embodyaspectcornerstone: {
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.name === 'Hattepon-Cornerstone-Tera' && !this.effectState.embodied) {
+				this.effectState.embodied = true;
+				this.boost({def: 1}, pokemon);
+			}
+		},
+		onSwitchIn() {
+			delete this.effectState.embodied;
+		},
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1},
+		name: "Embody Aspect (Cornerstone)",
+		rating: 3.5,
+		num: 304,
+	},
+	embodyaspecthearthflame: {
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.name === 'Hattepon-Hearthflame-Tera' && !this.effectState.embodied) {
+				this.effectState.embodied = true;
+				this.boost({atk: 1}, pokemon);
+			}
+		},
+		onSwitchIn() {
+			delete this.effectState.embodied;
+		},
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1},
+		name: "Embody Aspect (Hearthflame)",
+		rating: 3.5,
+		num: 303,
+	},
+	embodyaspectteal: {
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.name === 'Hattepon-Teal-Tera' && !this.effectState.embodied) {
+				this.effectState.embodied = true;
+				this.boost({spe: 1}, pokemon);
+			}
+		},
+		onSwitchIn() {
+			delete this.effectState.embodied;
+		},
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1},
+		name: "Embody Aspect (Teal)",
+		rating: 3.5,
+		num: 301,
+	},
+	embodyaspectwellspring: {
+		onStart(pokemon) {
+			if (pokemon.baseSpecies.name === 'Hattepon-Wellspring-Tera' && !this.effectState.embodied) {
+				this.effectState.embodied = true;
+				this.boost({spd: 1}, pokemon);
+			}
+		},
+		onSwitchIn() {
+			delete this.effectState.embodied;
+		},
+		flags: {failroleplay: 1, noreceiver: 1, noentrain: 1, notrace: 1, failskillswap: 1, notransform: 1},
+		name: "Embody Aspect (Wellspring)",
+		rating: 3.5,
+		num: 302,
+	},
 	//Vanilla abilities
 	//Extending Inner Focus's Intimidate immunity to derivatives
 	innerfocus: {
 		inherit: true,
 		onTryBoost(boost, target, source, effect) {
-			if (['Intimidate','Mad Cow','Forest Fury','Shock Factor'].includes(effect.name)) {
+			if (['Intimidate','Mad Cow','Forest Fury','Shock Factor','Daunting Storm'].includes(effect.name)) {
 				if (boost.atk) {
 					delete boost.atk;
 					this.add('-fail', target, 'unboost', 'Attack', '[from] ability: Inner Focus', '[of] ' + target);
