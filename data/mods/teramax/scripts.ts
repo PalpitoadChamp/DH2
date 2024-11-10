@@ -64,7 +64,7 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "appletun").learnset.sludgebomb = ["9L1"];
 		this.modData("Learnsets", "appletun").learnset.toxic = ["9L1"];
 		this.modData("Learnsets", "butterfree").learnset.mysticalfire = ["9L1"];
-		this.modData("Learnsets", "butterfree").learnset.spore = ["9L1"];
+		//this.modData("Learnsets", "butterfree").learnset.spore = ["9L1"];
 		this.modData("Learnsets", "butterfree").learnset.earthpower = ["9L1"];
 		this.modData("Learnsets", "butterfree").learnset.sludgebomb = ["9L1"];
 		this.modData("Learnsets", "centiskorch").learnset.firstimpression = ["9L1"];
@@ -90,9 +90,14 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "tatsugiri").learnset.aurasphere = ["9L1"];
 		this.modData("Learnsets", "screamtail").learnset.knockoff = ["9L1"];
 		this.modData("Learnsets", "screamtail").learnset.nastyplot = ["9L1"];
-		this.modData("Learnsets", "screamtail").learnset.snarl = ["9L1"];
 		this.modData("Learnsets", "screamtail").learnset.taunt = ["9L1"];
 		this.modData("Learnsets", "screamtail").learnset.uturn = ["9L1"];
+		this.modData("Learnsets", "screamtail").learnset.toxic = ["9L1"];
+		this.modData("Learnsets", "screamtail").learnset.sludgebomb = ["9L1"];
+		this.modData("Learnsets", "screamtail").learnset.poisonjab = ["9L1"];
+		this.modData("Learnsets", "screamtail").learnset.toxicspikes = ["9L1"];
+		this.modData("Learnsets", "screamtail").learnset.gunkshot = ["9L1"];
+		this.modData("Learnsets", "screamtail").learnset.moonblast = ["9L1"];
 		this.modData("Learnsets", "brutebonnet").learnset.toxic = ["9L1"];
 		this.modData("Learnsets", "brutebonnet").learnset.gunkshot = ["9L1"];
 		this.modData("Learnsets", "brutebonnet").learnset.sludgebomb = ["9L1"];
@@ -139,14 +144,15 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "ironjugulis").learnset.aeroblast = ["9L1"];
 		this.modData("Learnsets", "ironjugulis").learnset.roost = ["9L1"];
 		this.modData("Learnsets", "ironjugulis").learnset.defog = ["9L1"];
-		this.modData("Learnsets", "ironjugulis").learnset.electroshot = ["9L1"];
+		this.modData("Learnsets", "ironjugulis").learnset.thunder = ["9L1"];
 		this.modData("Learnsets", "ironleaves").learnset.bitterblade = ["9L1"];
 		this.modData("Learnsets", "ironleaves").learnset.psychic = ["9L1"];
 		this.modData("Learnsets", "ironleaves").learnset.psychocut = ["9L1"];
+		this.modData("Learnsets", "ironleaves").learnset.hornleech = ["9L1"];
+		this.modData("Learnsets", "ironleaves").learnset.powerwhip = ["9L1"];
 		this.modData("Learnsets", "ironthorns").learnset.flamethrower = ["9L1"];
 		this.modData("Learnsets", "ironthorns").learnset.risingvoltage = ["9L1"];
 		this.modData("Learnsets", "kingler").learnset.meteormash = ["9L1"];
-		this.modData("Learnsets", "kingler").learnset.closecombat = ["9L1"];
 		this.modData("Learnsets", "coalossal").learnset.sludgebomb = ["9L1"];
 		this.modData("Learnsets", "drednaw").learnset.stoneaxe = ["9L1"];
 		this.modData("Learnsets", "drednaw").learnset.brickbreak = ["9L1"];
@@ -183,6 +189,35 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "toedscruel").learnset.partingshot = ["9L1"];
 		this.modData("Learnsets", "gastrodon").learnset.toxic = ["9L1"];
 		this.modData("Learnsets", "gastrodon").learnset.knockoff = ["9L1"];
+		delete this.modData('Learnsets', 'darmanitangalar').learnset.freezedry;
+		delete this.modData('Learnsets', 'darumakagalar').learnset.freezedry;
+		delete this.modData('Learnsets', 'kingler').learnset.brickbreak;
+		delete this.modData('Learnsets', 'kingler').learnset.rocksmash;
+		delete this.modData('Learnsets', 'kingler').learnset.superpower;
+		delete this.modData('Learnsets', 'kingler').learnset.hammerarm;
+		delete this.modData('Learnsets', 'krabby').learnset.brickbreak;
+		delete this.modData('Learnsets', 'krabby').learnset.rocksmash;
+		delete this.modData('Learnsets', 'krabby').learnset.superpower;
+		delete this.modData('Learnsets', 'krabby').learnset.hammerarm;
+		this.modData("Learnsets", "lapras").learnset.earthpower = ["9L1"];
+		this.modData("Learnsets", "garbodor").learnset.knockoff = ["9L1"];
+		this.modData("Learnsets", "garbodor").learnset.earthquake = ["9L1"];
+		this.modData("Learnsets", "sandaconda").learnset.rapidspin = ["9L1"];
+		this.modData("Learnsets", "sandaconda").learnset.uturn = ["9L1"];
+		this.modData("Learnsets", "hatterene").learnset.belch = ["9L1"];
+		this.modData("Learnsets", "copperajah").learnset.powerwhip = ["9L1"];
+		this.modData("Learnsets", "copperajah").learnset.spikes = ["9L1"];
+		this.modData("Learnsets", "charizard").learnset.smog = ["9L1"];
+		this.modData("Learnsets", "charizard").learnset.roost = ["9L1"];
+		this.modData("Learnsets", "gengar").learnset.aurasphere = ["9L1"];
+		this.modData("Learnsets", "gengar").learnset.chillyreception = ["9L1"];
+		this.modData("Learnsets", "toxtricity").learnset.icepunch = ["9L1"];
+		this.modData("Learnsets", "toxtricity").learnset.barbbarrage = ["9L1"];
+		this.modData("Learnsets", "toxtricity").learnset.needlearm = ["9L1"];
+		this.modData("Learnsets", "toxtricitylowkey").learnset.nastyplot = ["9L1"];
+		this.modData("Learnsets", "toxtricitylowkey").learnset.slackoff = ["9L1"];
+		this.modData("Learnsets", "toxtricitylowkey").learnset.icywind = ["9L1"];
+		this.modData("Learnsets", "duraludon").learnset.powergem = ["9L1"];
 	},
 	actions: {
 		inherit: true,
@@ -309,7 +344,7 @@ export const Scripts: ModdedBattleScriptsData = {
 							(move.name === 'False Surrender' && pokemon.baseSpecies.baseSpecies === 'Grimmsnarl') ||
 							(move.name === 'Draining Kiss' && pokemon.baseSpecies.baseSpecies === 'Alcremie') ||
 							(move.name === 'Heavy Slam' && pokemon.baseSpecies.baseSpecies === 'Copperajah') ||
-							(move.name === 'Draco Meteor' && pokemon.baseSpecies.baseSpecies === 'Excadrill') ||
+							(move.name === 'Draco Meteor' && pokemon.baseSpecies.baseSpecies === 'Duraludon') ||
 							(move.name === 'Wicked Blow' && pokemon.baseSpecies.baseSpecies === 'Urshifu') ||
 							(move.name === 'Surging Strikes' && pokemon.baseSpecies.baseSpecies === 'Urshifu')) maxMove = gMaxMove;
 					}

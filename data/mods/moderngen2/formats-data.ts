@@ -4926,15 +4926,17 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	zeraora: {
 		inherit: true,
 		gen: 2,
-		tier: "OU",
+		tier: "Uber",
 	},
 	meltan: {
 		inherit: true,
+		isNonstandard: null,
 		gen: 2,
 		tier: "OU",
 	},
 	melmetal: {
 		inherit: true,
+		isNonstandard: null,
 		gen: 2,
 		tier: "OU",
 	},
@@ -5991,6 +5993,46 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "OU",
 	},
 	ogerponcornerstone: {
+		inherit: true,
+		gen: 2,
+		tier: "OU",
+	},
+	archaludon: {
+		inherit: true,
+		gen: 2,
+		tier: "OU",
+	},
+	hydrapple: {
+		inherit: true,
+		gen: 2,
+		tier: "OU",
+	},
+	gougingfire: {
+		inherit: true,
+		gen: 2,
+		tier: "OU",
+	},
+	ragingbolt: {
+		inherit: true,
+		gen: 2,
+		tier: "OU",
+	},
+	ironboulder: {
+		inherit: true,
+		gen: 2,
+		tier: "OU",
+	},
+	ironcrown: {
+		inherit: true,
+		gen: 2,
+		tier: "OU",
+	},
+	terapagos: {
+		inherit: true,
+		gen: 2,
+		tier: "OU",
+	},
+	pecharunt: {
 		inherit: true,
 		gen: 2,
 		tier: "OU",

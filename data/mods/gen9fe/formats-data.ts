@@ -1,4 +1,4 @@
-export const FormatsData: {[k: string]: SpeciesFormatsData} = {
+export const FormatsData: import('../../../sim/dex-species').SpeciesFormatsDataTable = {
 	revarantis: {
 		tier: "FEOU",
 		doublesTier: "DOU",
@@ -36,7 +36,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 75,
 	},
 	zarubok: {
-		tier: "FEOU",
+		tier: "FEUU",
 		doublesTier: "DOU",
 		randomBattleMoves: ["gunkshot", "crunch", "suckerpunch", "swordsdance"],
 		randomBattleLevel: 75,
@@ -61,7 +61,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 75,
 	},
 	slitherking: {
-		tier: "FEUU",
+		tier: "FEOU",
 		doublesTier: "DOU",
 		randomBattleMoves: ["morningsun", "uturn", "firstimpression", "flareblitz"],
 		randomBattleLevel: 80,
@@ -92,7 +92,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		requiredItem: "Altarianite",
 	},
 	ironpins: {
-		tier: "FEOU",
+		tier: "FEUU",
 		doublesTier: "DOU",
 		randomBattleMoves: ["swordsdance", "psyblade", "trailblaze", "zingzap"],
 		randomBattleLevel: 75,
@@ -138,7 +138,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 75,
 	},
 	solvaliantmega: {
-		tier: "FEOU",
+		tier: "Uber",
 		doublesTier: "DOU",
 		randomBattleMoves: ["moonblast", "knockoff", "closecombat", "fireblast"],
 		randomBattleLevel: 73,
@@ -295,7 +295,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 75,
 	},
 	bronzebonnet: {
-		tier: "FEOU",
+		tier: "FEUU",
 		doublesTier: "DOU",
 		randomBattleMoves: ["spore", "synthesis", "heavyslam", "seedbomb"],
 		randomBattleLevel: 75,
@@ -408,19 +408,19 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 75,
 	},
 	zoinkazenta: {
-		tier: "FEOU",
+		tier: "FEUU",
 		doublesTier: "DOU",
 		randomBattleMoves: ["closecombat", "doubleedge", "crunch", "wildcharge"],
 		randomBattleLevel: 75,
 	},
 	decidulax: {
-		tier: "FEOU",
+		tier: "FEUU",
 		doublesTier: "DOU",
 		randomBattleMoves: ["swordsdance", "roost", "spiritshackle", "bodyslam"],
 		randomBattleLevel: 75,
 	},
 	corvizolt: {
-		tier: "FEOU",
+		tier: "FEUU",
 		doublesTier: "DOU",
 		randomBattleMoves: ["boltbeak", "bravebird", "earthquake", "roost"],
 		randomBattleLevel: 75,
@@ -502,13 +502,13 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 75,
 	},
 	okiferro: {
-		tier: "FEOU",
+		tier: "FEUU",
 		doublesTier: "DOU",
 		randomBattleMoves: ["powerwhip", "knockoff", "spikes", "leechseed", "drainpunch", "swordsdance"],
 		randomBattleLevel: 75,
 	},
 	dragocoal: {
-		tier: "FEOU",
+		tier: "FEUU",
 		doublesTier: "DOU",
 		randomBattleMoves: ["flareblitz", "dragontail", "roost", "rapidspin"],
 		randomBattleLevel: 75,
@@ -544,7 +544,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 75,
 	},
 	empoliaryhisui: {
-		tier: "FEOU",
+		tier: "FEUU",
 		doublesTier: "DOU",
 		randomBattleMoves: ["esperwing", "surf", "flipturn", "stealthrock", "calmmind"],
 		randomBattleLevel: 75,
@@ -613,7 +613,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		randomBattleLevel: 80,
 	},
 	farinape: {
-		tier: "FEOU",
+		tier: "FEUU",
 		doublesTier: "DOU",
 		randomBattleMoves: ["vacuumwave", "nastyplot", "twinbeam", "thunderbolt"],
 		randomBattleLevel: 75,
@@ -639,7 +639,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	magnegiri: {
-		tier: "FEUU",
+		tier: "FEUUBL",
 		doublesTier: "DOU",
 	},
 	celeblim: {
@@ -652,6 +652,7 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	tentazormega: {
 		tier: "FEUUBL",
+		requiredItem: "Scizorite",
 		doublesTier: "DOU",
 	},
 	golegonalola: {
@@ -676,14 +677,17 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	hatteponwellspring: {
 		tier: "FEUU",
+		requiredItem: "Wellspring Mask",
 		doublesTier: "DOU",
 	},
 	hatteponhearthflame: {
 		tier: "FEUU",
+		requiredItem: "Hearthflame Mask",
 		doublesTier: "DOU",
 	},
 	hatteponcornerstone: {
 		tier: "FEUU",
+		requiredItem: "Cornerstone Mask",
 		doublesTier: "DOU",
 	},
 	buzzscor: {
@@ -704,6 +708,106 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 	},
 	aerodirgemega: {
 		tier: "FEUUBL",
+		requiredItem: "Aerodactylite",
+		doublesTier: "DOU",
+	},
+	kilommoototem: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	lunarunt: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	zorosharkhisui: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	zorosharkhisuimega: {
+		tier: "FEUUBL",
+		requiredItem: "Sharpedonite",
+		doublesTier: "DOU",
+	},
+	bombirdus: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	scoliraptor: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	worupt: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	woruptmega: {
+		tier: "FEUU",
+		requiredItem: "Cameruptite",
+		doublesTier: "DOU",
+	},
+	aromalge: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	crawnacl: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	tapusala: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	jirabsca: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	donphurotthisui: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	regithorn: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	lanpass: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	applekinggalar: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	swoltres: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	orthaconda: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	girachamorigin: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	girachamoriginmega: {
+		tier: "Uber",
+		requiredItem: "Medichamite",
+		doublesTier: "DOU",
+	},
+	eldetini: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	tinkophlosionhisui: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	glimmocruel: {
+		tier: "FEUU",
+		doublesTier: "DOU",
+	},
+	diafetchd: {
+		tier: "FEUU",
 		doublesTier: "DOU",
 	},
 
@@ -791,4 +895,53 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "FENFE",
 		doublesTier: "DOU",
 	},
+	zorvanhahisui: {
+		tier: "FELC",
+		doublesTier: "DOU",
+	},
+	starpede: {
+		tier: "FELC",
+		doublesTier: "DOU",
+	},
+	whirlavia: {
+		tier: "FENFE",
+		doublesTier: "DOU",
+	},
+	watmoo: {
+		tier: "FELC",
+		doublesTier: "DOU",
+	},
+	spritkelp: {
+		tier: "FELC",
+		doublesTier: "DOU",
+	},
+	naclphish: {
+		tier: "FELC",
+		doublesTier: "DOU",
+	},
+	phanpott: {
+		tier: "FELC",
+		doublesTier: "DOU",
+	},
+	chinpass: {
+		tier: "FELC",
+		doublesTier: "DOU",
+	},
+	applipokegalar: {
+		tier: "FELC",
+		doublesTier: "DOU",
+	},
+	tinkaquil: {
+		tier: "FELC",
+		doublesTier: "DOU",
+	},
+	tinkalava: {
+		tier: "FENFE",
+		doublesTier: "DOU",
+	},
+	glimmcool: {
+		tier: "FELC",
+		doublesTier: "DOU",
+	},
+
 };

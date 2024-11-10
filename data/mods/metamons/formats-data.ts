@@ -293,10 +293,43 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
    accelgor: {
 		tier: "MetaMons",
 	},
-   dachsbun: {
+  dachsbun: {
 		tier: "MetaMons",
 	},
 	lickilicky: {
+		tier: "MetaMons",
+	},
+	stoutland: {
+		tier: "MetaMons",
+	},
+	glimmet: {
+		tier: "MetaMons",
+	},
+	beartic: {
+		tier: "MetaMons",
+	},
+	taurospaldeacombat: {
+		tier: "MetaMons",
+	},
+	taurospaldeablaze: {
+		tier: "MetaMons",
+	},
+	taurospaldeaaqua: {
+		tier: "MetaMons",
+	},
+	appletun: {
+		tier: "MetaMons",
+	},
+	raticatealola: {
+		tier: "MetaMons",
+	},
+	rotomheatgen9: {
+		tier: "MetaMons",
+	},
+	milotic: {
+		tier: "MetaMons",
+	},
+	staraptor: {
 		tier: "MetaMons",
 	},
 };

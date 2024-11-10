@@ -1,4 +1,6 @@
 export const Aliases: {[alias: string]: string} = {
+	menacing: null,
+	
 	weezer: "Weezaluna-Bloodmoon",
 	toedi: "Toedieleki",
 	wereallyletamonnamed: "Anoraidon",
@@ -11,6 +13,7 @@ export const Aliases: {[alias: string]: string} = {
 	crygar: "Crygargonal",
 	supersaiyantweety: "Celedos",
 	guguzz: "Guguzzparce",
+	rupert: "Goopert-Hisui",
 	
 	//Paradox fusions
 	scorm: "Scream Cormorant",
