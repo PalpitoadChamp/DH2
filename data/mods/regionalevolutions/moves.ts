@@ -116,4 +116,135 @@ export const Moves: { [moveid: string]: ModdedMoveData } = {
 		desc: "The user recovers 1/2 the HP lost by the target, rounded half up. If Big Root is held by the user, the HP recovered is 1.3x normal, rounded half down.",
 		shortDesc: "User recovers 50% of the damage dealt.",
 	},
+	coraltrap: {
+		num: -6,
+		accuracy: 100,
+		basePower: 150,
+		category: "Physical",
+		name: "Coral Trap",
+		pp: 5,
+		priority: -3,
+		flags: {protect: 1, failmefirst: 1, nosleeptalk: 1, noassist: 1, failcopycat: 1, failinstruct: 1},
+		priorityChargeCallback(pokemon) {
+			pokemon.addVolatile('shelltrap');
+		},
+		onTryMove(pokemon) {
+			if (!pokemon.volatiles['shelltrap']?.gotHit) {
+				this.attrLastMove('[still]');
+				this.add('cant', pokemon, 'Coral Trap', 'Coral Trap');
+				return null;
+			}
+		},
+		condition: {
+			duration: 1,
+			onStart(pokemon) {
+				this.add('-singleturn', pokemon, 'move: Coral Trap');
+			},
+			onHit(pokemon, source, move) {
+				if (!pokemon.isAlly(source) && move.category === 'Physical') {
+					this.effectState.gotHit = true;
+					const action = this.queue.willMove(pokemon);
+					if (action) {
+						this.queue.prioritizeAction(action);
+					}
+				}
+			},
+		},
+		secondary: null,
+		target: "allAdjacentFoes",
+		type: "Water",
+		contestType: "Tough",
+		desc: "Fails unless the user is hit by a physical attack from an opponent this turn before it can execute the move. If the user was hit and has not fainted, it attacks immediately after being hit, and the effect ends. If the opponent's physical attack had a secondary effect removed by the Sheer Force Ability, it does not count for the purposes of this effect.",
+		shortDesc: "User must take physical damage before moving.",
+
+		start: "  [POKEMON] set a coral trap!",
+		prepare: "  [POKEMON] set a coral trap!",
+		cant: "[POKEMON]'s coral trap didn't work!",
+	},
+	deafeningroar: {
+		num: -7,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Deafening Roar",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1},
+		secondary: {
+			chance: 10,
+			boosts: {
+				spd: -1,
+			},
+		},
+		target: "allAdjacent",
+		type: "Dragon",
+		contestType: "Tough",
+		desc: "Hits all adjacent Pokémon and has a 10% chance of lowering the target's SpD by one stage.",
+		shortDesc: "10% chance of lowering target's SpD. Hits adjacent Pokemon.",
+	},
+	refracture: {
+		num: -8,
+		accuracy: 95,
+		basePower: 85,
+		category: "Special",
+		name: "Refracture",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1},
+		secondary: {
+			chance: 40,
+			boosts: {
+				accuracy: -1,
+			},
+		},
+		target: "normal",
+		type: "Rock",
+		contestType: "Cool",
+		desc: "Has a 40% chance to lower the target's accuracy by 1 stage.",
+		shortDesc: "40% chance to lower the target's accuracy by 1.",
+	},
+	deathstare: {
+		num: -9,
+		accuracy: 50,
+		basePower: 120,
+		category: "Special",
+		name: "Zap Cannon",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1},
+		volatileStatus: 'curse',
+		secondary: null,
+		target: "normal",
+		type: "Ghost",
+		contestType: "Cool",
+		desc: "Inflicts Curse status upon the target.",
+		shortDesc: "Inflicts Curse status upon the target.",
+	},
+	calciapplejuice: {
+		num: -10,
+		accuracy: 100,
+		basePower: 90,
+		category: "Special",
+		name: "Calciapple Juice",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1},
+		secondaries: [
+			{
+				chance: 20,
+				boosts: {
+					def: -1,
+				},
+			}, {
+				chance: 20,
+				boosts: {
+					spd: -1,
+				},
+			},
+		],
+		target: "normal",
+		type: "Grass",
+		desc: "Has a 20% chance to lower the target's Defense and SpD by 1 stage each.",
+		shortDesc: "20% chance to lower the target's Def and SpD by 1.",
+	},
 };

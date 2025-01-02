@@ -26,6 +26,14 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 	baseball: {
 		name: 'baseball',
 		effectType: 'Status',
+		onStart(target, source, sourceEffect) {
+			this.add('-message', 'baseball this guy');
+			if (sourceEffect && sourceEffect.effectType === 'Ability') {
+				this.add('-status', target, 'baseball', '[from] ability: ' + sourceEffect.name, '[of] ' + source);
+			} else {
+				this.add('-status', target, 'baseball');
+			}
+		},
 		onModifyAtkPriority: 1,
 		onModifyAtk(atk, pokemon) {
   			return this.chainModify(0.75);
@@ -51,15 +59,22 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		},
 		onSourceModifyDamage(damage, source, target, move) {
 			if (['grassknot', 'lowkick'].includes(move.id)) {
-				return this.chainModify(2);
+				return 120;
 			}
 		},
 		onBasePower(basePower, pokemon, target, move) {
+			if(target.volatiles['bigbutton']) return;
 			const boostedMoves = [
-				'astonish', 'extrasensory', 'needlearm', 'stomp', 'steamroller', 'bodyslam', 'shadowforce', 'phantomforce', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault'
+				'aerialace', 'aquatail', 'crabhammer', 'forcepalm', 'furyattack', 'gigaimpact', 'heatcrash', 'heavyslam', 'highhorsepower', 'irontail', 'lethalhug', 'meteormash', 'nuzzle', 'peck', 'playrough', 'slam', 'strugglebug', 'visegrip'
 			];
-			if (boostedMoves.includes(move.id)) {
-				return this.chainModify(2);
+			const minimizeMoves = [
+					'stomp', 'steamroller', 'bodyslam', 'flyingpress', 'dragonrush', 'heatcrash', 'heavyslam', 'maliciousmoonsault', 'supercellslam',
+				];
+			if (boostedMoves.includes(move.id) || minimizeMoves.includes(move.id)) {
+				move.accuracy = true;
+				if (['heatcrash', 'heavyslam'].includes(move.id)) return 120;
+				if (move.basePower < 60) return this.chainModify(2);
+				if (minimizeMoves.includes(move.id)) return this.chainModify(1.5);
 			}
 		},
 		onEnd(pokemon) {
@@ -114,7 +129,7 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		effectType: 'Weather',
 		duration: 5,
 		durationCallback(source, effect) {
-			if (source?.hasItem('acidrockorsomethingidfk')) {
+			if (source?.hasItem('sourrockorsomethingidfk')) {
 				return 8;
 			}
 			return 5;
@@ -131,13 +146,10 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 		onFieldResidual() {
 			this.add('-weather', 'Acid Rain', '[upkeep]');
 			if (this.field.isWeather('Acid Rain')) this.eachEvent('Weather');
-			for (const side of this.sides) {
-				side.removeFishingTokens(1);
-			}
 		},
 		onWeather(target) {
-			if(target.hasType('Lemon')) this.heal(target.baseMaxhp / 16);
-			else if(['Water', 'Steel'].contains(target.types) && !target.hasType('Bug')) this.damage(target.baseMaxhp / 8);
+			if(target.hasType('Lemon')) this.heal(target.baseMaxhp / 16, target, target);
+			else if((target.hasType('Water') || target.hasType('Steel')) && !target.hasType('Bug')) this.damage(target.baseMaxhp / 16);
 		},
 		onFieldEnd() {
 			this.add('-weather', 'none');
@@ -161,23 +173,31 @@ export const Conditions: {[id: string]: ModdedConditionData} = {
 			}
 		},
 		onFieldStart(field, source, effect) {
+			this.add('-message', "The dead rose from their graves!");
 			if (effect?.effectType === 'Ability') {
 				if (this.gen <= 5) this.effectState.duration = 0;
-				this.add('-weather', 'Graveyard', '[from] ability: ' + effect.name, '[of] ' + source);
+				this.add('-weather', 'Graveyard', '[from] ability: ' + effect.name, '[of] ' + source, '[silent]');
 			} else {
-				this.add('-weather', 'Graveyard');
+				this.add('-weather', 'Graveyard', '[silent]');
 			}
 		},
 		onFieldResidualOrder: 1,
 		onFieldResidual() {
+			this.add('-message', "Zombies roam the battlefield.");
 			this.add('-weather', 'Graveyard', '[upkeep]');
 			if (this.field.isWeather('Graveyard')) this.eachEvent('Weather');
 		},
 		onWeather(target) {
-			this.damage(target.baseMaxhp / 8);
+			if(!target.hasAbility('magicguard') && 
+			   !target.hasAbility('ghoulgobbler') &&
+			   !target.hasAbility('rkssystem')) {
+				this.add('-message', `${target.name} was attacked by the zombies!`);
+				this.damage(target.baseMaxhp / 16);
+			}
 		},
 		onFieldEnd() {
-			this.add('-weather', 'none');
+			this.add('-weather', 'none', '[silent]');
+			this.add('-message', "The zombies vanished from Ironfistlandia... for now.");
 		},
 	},
-}
+};

@@ -445,6 +445,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		megaAbility: {0: "Residual Drain"},
 		megaStats: {hp: 80, atk: 70, def: 98, spa: 130, spd: 120, spe: 117},
 		megaStone: "Tentacruelinite",
+		movepoolAdditions: ["scald"],
 		megaCreator: "Lord Pxperto & BlueRay",
 	},
 
@@ -503,5 +504,38 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		megaStone: "Kleavorite",
 		movepoolAdditions: ["roost"],
 		megaCreator: "Lysion",
+	},
+
+	// slate 11
+
+	slitherwing: {
+		inherit: true,
+		mega: "slitherwingmega",
+		megaName: "Slither Wing-Mega",
+		megaAbility: {0: "Swarm"},
+		megaStats: {hp: 85, atk: 155, def: 99, spa: 105, spd: 135, spe: 91},
+		megaStone: "Slitherwite",
+		megaCreator: "DrPumpkinz",
+	},
+
+	ironthorns: {
+		inherit: true,
+		mega: "ironthornsmega",
+		megaName: "Iron Thorns-Mega",
+		megaAbility: {0: "Download"},
+		megaStats: {hp: 100, atk: 144, def: 128, spa: 110, spd: 84, spe: 104},
+		megaStone: "Thornite",
+		megaCreator: "okispokis",
+	},
+
+	wochien: {
+		inherit: true,
+		mega: "wochienmega",
+		megaName: "Wo-Chien-Mega",
+		megaAbility: {0: "Grudgeful Tablets"},
+		megaStats: {hp: 85, atk: 104, def: 141, spa: 112, spd: 144, spe: 84},
+		megaStone: "Wochienite",
+		movepoolAdditions: ["strengthsap"],
+		megaCreator: "lydian",
 	},
 };

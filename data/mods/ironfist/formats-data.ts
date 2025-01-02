@@ -299,7 +299,7 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		doublesTier: "DOU",
 	},
 	jirachitwo: {
-		tier: "Usurper of the Wheel",
+		tier: "UoTW",
 		doublesTier: "DOU",
 	},
 	shinxfishing: {
@@ -561,4 +561,82 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 		tier: "IF",
 		doublesTier: "DOU",
 	},
-}
+	
+	hiveweb: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	syndicant: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	fishmarketing3: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	lemonganium: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	carnivineif: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	grumpig: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+
+	impromancer: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	panderdragoon: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	soruarc: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	emolga: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	skibidragon: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	hitmontopmega: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	porygonz: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	porygonmegaz: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	furumo: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	megaman: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	fudgesaur: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	fudgesaurmega: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+	darkpoison: {
+		tier: "IF",
+		doublesTier: "DOU",
+	},
+};

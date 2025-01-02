@@ -8,4 +8,12 @@ export const FormatsData: {[k: string]: ModdedSpeciesFormatsData} = {
 	polteageistantique: {},
 	eiscuenoice: {},
 	morpekohangry: {},
+	// HOW MANY TIMES WILL WE HAVE TO TEACH YOU THIS LESSON OLD MAN
+	brambleghastmega1: {},
+	brambleghastmega2: {},
+	brambleghastmega3: {},
+	brambleghastmega4: {},
+	brambleghastmegatangled: {},
+	farigirafmega: {},
+	farigirafmeganocturnal: {},
 };

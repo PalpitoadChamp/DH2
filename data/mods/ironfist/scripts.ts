@@ -1,3 +1,4 @@
+import {Dex} from '../../../sim/dex';
 export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
 	gen: 9,
 	teambuilderConfig: {
@@ -8,7 +9,17 @@ export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
 	},	
 	
 	init() {
-		
+		for (const pokemon in Dex.data.Pokedex){
+			if (pokemon in Dex.data.Learnsets && this.modData('Learnsets', pokemon).learnset) {
+				this.modData("Learnsets", pokemon).learnset.fishingterrain = ["9L1"];
+				this.modData("Learnsets", pokemon).learnset.holdhands = ["9L1"];
+				this.modData("Learnsets", pokemon).learnset.mewing = ["9L1"];
+				this.modData("Learnsets", pokemon).learnset.epicbeam = ["9L1"];
+				this.modData("Learnsets", pokemon).learnset.bigbash = ["9L1"];
+				const mon = Dex.species.get(pokemon);
+				if(!mon.types.includes('Water') && !mon.types.includes('Steel')) this.modData("Learnsets", pokemon).learnset.fisheater = ["9L1"];
+			}
+		}
 	},
 	battle: {
 		runAction(action: Action) {
@@ -329,7 +340,51 @@ export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
 			}
 
 			return false;
-		}
+		},
+		heal(damage: number, target?: Pokemon, source: Pokemon | null = null, effect: 'drain' | Effect | null = null) {
+			if (this.event) {
+				target ||= this.event.target;
+				source ||= this.event.source;
+				effect ||= this.effect;
+			}
+			if (effect === 'drain') effect = this.dex.conditions.getByID(effect as ID);
+			if (damage && damage <= 1) damage = 1;
+			damage = this.trunc(damage);
+			// for things like Liquid Ooze, the Heal event still happens when nothing is healed.
+			damage = this.runEvent('TryHeal', target, source, effect, damage);
+			if (!damage) return damage;
+			if (!target?.hp) return false;
+			if (!target.isActive) return false;
+			if (target.hp >= target.maxhp) return false;
+			const finalDamage = target.heal(damage, source, effect);
+			switch (effect?.id) {
+			case 'leechseed':
+			case 'rest':
+				this.add('-heal', target, target.getHealth, '[silent]');
+				break;
+			case 'drain':
+				this.add('-heal', target, target.getHealth, '[from] drain', '[of] ' + source);
+				break;
+			case 'wish':
+				break;
+			case 'zpower':
+				this.add('-heal', target, target.getHealth, '[zeffect]');
+				break;
+			default:
+				if (!effect) break;
+				if (effect.effectType === 'Move') {
+					this.add('-heal', target, target.getHealth);
+				} else if (source && source !== target) {
+					this.add('-heal', target, target.getHealth, '[from] ' + effect.fullname, '[of] ' + source);
+				} else {
+					this.add('-heal', target, target.getHealth, '[from] ' + effect.fullname);
+				}
+				break;
+			}
+			this.runEvent('Heal', target, source, effect, finalDamage);
+			target.addVolatile('healed');
+			return finalDamage;
+		},
 	},
 	queue: {
 		resolveAction(action: ActionChoice, midTurn = false): Action[] {
@@ -907,9 +962,7 @@ export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
 				// Should always subtract, but stop at 0 to prevent errors.
 				this.choice.forcedSwitchesLeft = this.battle.clampIntRange(this.choice.forcedSwitchesLeft - 1, 0);
 				pokemon.switchFlag = false;
-				pokemon.side.pokemonLeft--;
-				targetPokemon.fainted = true;
-				this.battle.add('faint', (targetPokemon.toString().slice(0, 2) + "a" + targetPokemon.toString().slice(2)));
+				this.battle.faint(targetPokemon, targetPokemon, this.battle.dex.moves.get('epicbeam'));
 				this.choice.actions.push({
 					choice: 'epicbeam',
 					pokemon,
@@ -964,25 +1017,61 @@ export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
 			return true;
 		},
 		addFishingTokens(amount: number) {
-			if(amount === 0) return;
+			if (amount === 0 || Number.isNaN(amount)) return false;
 			if(this.fishingTokens === undefined) this.fishingTokens = 0;
-			if(this.battle.field.isTerrain('fishingterrain')) amount *= 2;
 			this.fishingTokens += amount;
 			const word = (amount === 1) ? 'token was' : 'tokens were';
 			this.battle.add('-message', `${amount} fishing ${word} added to ${this.name}'s side!`);
 			this.battle.hint(`They now have ${this.fishingTokens} tokens.`);
 		},
 		removeFishingTokens(amount: number) {
-			if(amount === 0) return;
-			if(this.fishingTokens === undefined) this.fishingTokens = 0;
-			if (amount > this.fishingTokens) {
-				//this.add('-message', `There weren't enough fishing tokens on the field!`);
-				return false;
-			}
+			if (this.fishingTokens === undefined) this.fishingTokens = 0;
+			if (amount === 0 || Number.isNaN(amount) || amount > this.fishingTokens) return false;
 			this.fishingTokens -= amount;
 			const word = (amount === 1) ? 'token was' : 'tokens were';
 			this.battle.add('-message', `${amount} fishing ${word} removed from ${this.name}'s side!`);
 			this.battle.hint(`They now have ${this.fishingTokens} tokens.`);
+			if (this.battle.field.isWeather('acidrain')) this.removeFishingToken();
+			return true;
+		},
+		removeFishingToken() {
+			if (this.fishingTokens === undefined) this.fishingTokens = 0;
+			if (this.fishingTokens < 1) return false;
+			this.fishingTokens -= 1;
+			this.battle.add('-message', `1 fishing token was removed from ${this.name}'s side!`);
+			this.battle.hint(`They now have ${this.fishingTokens} tokens.`);
+			return true;
+		},
+		addSideCondition(
+		status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null
+		): boolean {
+			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+			if (source === 'debug') source = this.active[0];
+			if (!source) throw new Error(`setting sidecond without a source`);
+			if (!source.getSlot) source = (source as any as Side).active[0];
+
+			status = this.battle.dex.conditions.get(status);
+			if (this.sideConditions[status.id]) {
+				if (!(status as any).onSideRestart) return false;
+				return this.battle.singleEvent('SideRestart', status, this.sideConditions[status.id], this, source, sourceEffect);
+			}
+			this.sideConditions[status.id] = {
+				id: status.id,
+				target: this,
+				source,
+				sourceSlot: source.getSlot(),
+				duration: status.duration,
+			};
+			if (status.durationCallback) {
+				this.sideConditions[status.id].duration =
+					status.durationCallback.call(this.battle, this.active[0], source, sourceEffect);
+			}
+			if (source.hasAbility('unitedparty') && status.duration && source.copen) this.sideConditions[status.id].duration += (status.id === 'tailwind') ? Math.floor(source.copen / 2) : source.copen; 
+			if (!this.battle.singleEvent('SideStart', status, this.sideConditions[status.id], this, source, sourceEffect)) {
+				delete this.sideConditions[status.id];
+				return false;
+			}
+			this.battle.runEvent('SideConditionStart', source, source, status);
 			return true;
 		},
 	},
@@ -999,7 +1088,7 @@ export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
 			if ('ingrain' in this.volatiles && this.battle.gen >= 4) return true;
 			if ('smackdown' in this.volatiles) return true;
 			const item = (this.ignoringItem() ? '' : this.item);
-			if (item === 'ironball') return true;
+			if (item === 'ironball' || item === 'itemfist') return true;
 			// If a Fire/Flying type uses Burn Up and Roost, it becomes ???/Flying-type, but it's still grounded.
 			if (!negateImmunity && this.hasType('Flying') && !('roost' in this.volatiles)) return false;
 			if (
@@ -1010,44 +1099,125 @@ export const Scripts: {[k: string]: ModdedBattleScriptsData} = {
 			if ('telekinesis' in this.volatiles) return false;
 			return item !== 'airballoon';
 		},
-		getSwitchRequestData(forAlly?: boolean) {
-		const entry: AnyObject = {
-			ident: this.fullname,
-			details: this.details,
-			condition: this.getHealth().secret,
-			active: (this.position < this.side.active.length),
-			stats: {
-				atk: this.baseStoredStats['atk'],
-				def: this.baseStoredStats['def'],
-				spa: this.baseStoredStats['spa'],
-				spd: this.baseStoredStats['spd'],
-				spe: this.baseStoredStats['spe'],
-			},
-			moves: this[forAlly ? 'baseMoves' : 'moves'].map(move => {
-				if (move === 'hiddenpower') {
-					return move + toID(this.hpType) + (this.battle.gen < 6 ? '' : this.hpPower);
+	},
+	field: {
+		inherit: true,
+		setWeather(status: string | Condition, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+			console.log(status);
+			status = this.battle.dex.conditions.get(status);
+			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+			if (source === 'debug') source = this.battle.sides[0].active[0];
+
+			if (this.weather === status.id) {
+				if (sourceEffect && sourceEffect.effectType === 'Ability') {
+					if (this.battle.gen > 5 || this.weatherState.duration === 0) {
+						return false;
+					}
+				} else if (this.battle.gen > 2 || status.id === 'sandstorm') {
+					return false;
 				}
-				if (move === 'frustration' || move === 'return') {
-					const basePowerCallback = this.battle.dex.moves.get(move).basePowerCallback as (pokemon: Pokemon) => number;
-					return move + basePowerCallback(this);
+			}
+			if (source) {
+				const result = this.battle.runEvent('SetWeather', source, source, status);
+				if (!result) {
+					if (result === false) {
+						if ((sourceEffect as Move)?.weather) {
+							this.battle.add('-fail', source, sourceEffect, '[from] ' + this.weather);
+						} else if (sourceEffect && sourceEffect.effectType === 'Ability') {
+							this.battle.add('-ability', source, sourceEffect, '[from] ' + this.weather, '[fail]');
+						}
+					}
+					return null;
 				}
-				return move;
-			}),
-			baseAbility: this.baseAbility,
-			item: this.item,
-			pokeball: this.pokeball,
-		};
-		if (this.battle.gen > 6) entry.ability = this.ability;
-		if (this.battle.gen >= 9) {
-			entry.commanding = !!this.volatiles['commanding'] && !this.fainted;
-			entry.reviving = this.isActive && !!this.side.slotConditions[this.position]['revivalblessing'];
-			entry.sacrificing = this.isActive && !!this.side.slotConditions[this.position]['epicbeam'];
-		}
-		if (this.battle.gen === 9) {
-			entry.teraType = this.teraType;
-			entry.terastallized = this.terastallized || '';
-		}
-		return entry;
-	}
+			}
+			const prevWeather = this.weather;
+			const prevWeatherState = this.weatherState;
+			this.weather = status.id;
+			this.weatherState = {id: status.id};
+			if (source) {
+				this.weatherState.source = source;
+				this.weatherState.sourceSlot = source.getSlot();
+				console.log(this.effectState.copen);
+				if (source.hasAbility('unitedparty') && status.duration && source.copen) status.duration += source.copen; 
+			}
+			if (status.duration) {
+				this.weatherState.duration = status.duration;
+			}
+			if (status.durationCallback) {
+				if (!source) throw new Error(`setting weather without a source`);
+				this.weatherState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+			}
+			if (!this.battle.singleEvent('FieldStart', status, this.weatherState, this, source, sourceEffect)) {
+				this.weather = prevWeather;
+				this.weatherState = prevWeatherState;
+				return false;
+			}
+			this.battle.eachEvent('WeatherChange', sourceEffect);
+			return true;
+		},
+		setTerrain(status: string | Effect, source: Pokemon | 'debug' | null = null, sourceEffect: Effect | null = null) {
+			console.log(status);
+			status = this.battle.dex.conditions.get(status);
+			if (!sourceEffect && this.battle.effect) sourceEffect = this.battle.effect;
+			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+			if (source === 'debug') source = this.battle.sides[0].active[0];
+			if (!source) throw new Error(`setting terrain without a source`);
+
+			if (this.terrain === status.id) return false;
+			const prevTerrain = this.terrain;
+			const prevTerrainState = this.terrainState;
+			this.terrain = status.id;
+			this.terrainState = {
+				id: status.id,
+				source,
+				sourceSlot: source.getSlot(),
+				duration: status.duration,
+			};
+			if (status.durationCallback) {
+				this.terrainState.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+			}
+			if (source.hasAbility('unitedparty') && status.duration && this.effectState.copen) this.terrainState.duration += this.effectState.copen; 
+			if (!this.battle.singleEvent('FieldStart', status, this.terrainState, this, source, sourceEffect)) {
+				this.terrain = prevTerrain;
+				this.terrainState = prevTerrainState;
+				return false;
+			}
+			this.battle.eachEvent('TerrainChange', sourceEffect);
+			return true;
+		},
+		addPseudoWeather(
+		status: string | Condition,
+		source: Pokemon | 'debug' | null = null,
+		sourceEffect: Effect | null = null
+		): boolean {
+			console.log(status);
+			if (!source && this.battle.event && this.battle.event.target) source = this.battle.event.target;
+			if (source === 'debug') source = this.battle.sides[0].active[0];
+			status = this.battle.dex.conditions.get(status);
+
+			let state = this.pseudoWeather[status.id];
+			if (state) {
+				if (!(status as any).onFieldRestart) return false;
+				return this.battle.singleEvent('FieldRestart', status, state, this, source, sourceEffect);
+			}
+			state = this.pseudoWeather[status.id] = {
+				id: status.id,
+				source,
+				sourceSlot: source?.getSlot(),
+				duration: status.duration,
+			};
+			if (status.durationCallback) {
+				if (!source) throw new Error(`setting fieldcond without a source`);
+				state.duration = status.durationCallback.call(this.battle, source, source, sourceEffect);
+			}
+			if (source.hasAbility('unitedparty') && status.duration && this.effectState.copen) this.terrainState.duration += this.effectState.copen; 
+			if (!this.battle.singleEvent('FieldStart', status, state, this, source, sourceEffect)) {
+				delete this.pseudoWeather[status.id];
+				return false;
+			}
+			this.battle.runEvent('PseudoWeatherChange', source, source, status);
+			return true;
+		},
 	},
 };
