@@ -2121,8 +2121,8 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 	unfiltered: {
 		onSourceModifyDamage(damage, source, target, move) {
 			if (target.getMoveHitData(move).typeMod > 0) {
-				this.debug('Unfiltered boost');
-				return this.chainModify([5461, 4096]);
+				this.debug('Unfiltered neutralize');
+				return this.chainModify(0.75);
 			}
 		},
 		onChangeBoost(boost, target, source, effect) {
@@ -2134,7 +2134,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		},
 		flags: {breakable: 1},
 		name: "Unfiltered",
-		shortDesc: "Stat raises lower stat instead and vice versa. Takes 4/3 damage from SE moves.",
+		shortDesc: "Contrary + Filter",
 	},
 	clumpingup: {
 		onTryHit(target, source, move) {
@@ -4198,7 +4198,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 			}
 		},
 		onUpdate(pokemon) {
-			if ((pokemon.hp <= pokemon.maxhp / 3)) {
+			if ((pokemon.hp <= pokemon.maxhp / 3) || this.field.isWeather('sunnyday')) {
 				pokemon.addVolatile('protopyre');
 			} else if (!pokemon.volatiles['protopyre']?.fromBooster) {
 				pokemon.removeVolatile('protopyre');
@@ -4748,7 +4748,7 @@ export const Abilities: {[k: string]: ModdedAbilityData} = {
 		onTerrainChange(pokemon) {
 			if (this.field.isTerrain('electricterrain')) {
 				pokemon.addVolatile('winddrive');
-			} else if (!pokemon.volatiles['winddrive']?.fromBooster) {
+			} else if (!pokemon.volatiles['winddrive']?.fromBooster && !pokemon.side.sideConditions['tailwind']) {
 				pokemon.removeVolatile('winddrive');
 			}
 		},

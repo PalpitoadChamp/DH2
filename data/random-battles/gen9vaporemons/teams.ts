@@ -537,7 +537,7 @@ export class RandomTeams {
 			// These attacks are redundant with each other
 			[['psychic', 'psychicnoise'], ['psyshock', 'psychicnoise']],
 			['surf', 'hydropump'],
-			['liquidation', 'wavecrash'],
+			['wavecrash', ['liquidation', 'waterfall']],
 			['aquajet', 'flipturn'],
 			['gigadrain', 'leafstorm'],
 			['powerwhip', 'hornleech'],
@@ -1174,7 +1174,8 @@ export class RandomTeams {
 		if (species.id === 'copperajah' && moves.has('heavyslam')) return 'Heavy Metal';
 		if (species.id === 'jumpluff') return 'Infiltrator';
 		if (species.id === 'toucannon' && !counter.get('skilllink')) return 'Keen Eye';
-		if (species.id === 'reuniclus') return 'Magic Guard';
+		if ((species.id === 'reuniclus' && role === 'AV Pivot') || species.id === 'alomomola') return 'Regenerator';
+		if (species.id === 'reuniclus' && role !== 'AV Pivot') return 'Magic Guard';
 		if (species.id === 'smeargle' && !counter.get('technician')) return 'Own Tempo';
 		if (species.id === 'zebstrika') return (moves.has('wildcharge')) ? 'Sap Sipper' : 'Lightning Rod';
 		if (species.id === 'sandaconda' || (species.id === 'scrafty' && moves.has('rest'))) return 'Shed Skin';
@@ -1189,6 +1190,22 @@ export class RandomTeams {
 		if (species.id === 'politoed' || species.id === 'pelipper') return 'Drizzle';
 		if ((species.id === 'farigiraf' && role === 'Fast Support') || species.id === 'taurospaldeablaze' || species.id === 'ampharos') return 'Cud Chew';
 		if (species.id === 'irontreads' && role === 'Bulky Support') return 'Momentum';
+		if (species.id === 'lilligant' && role === 'Setup Sweeper') return 'Healer';
+		if (species.id === 'lilligant' && role === 'Wallbreaker') return 'Sheer Heart';
+		if (species.id === 'abomasnow') return 'Snow Warning';
+		if (species.id === 'gallade' && (role === 'Setup Sweeper' || role === 'Fast Attacker')) return 'Sharpness';
+		if (species.id === 'gallade' && role === 'Bulky Setup') return 'Steadfast';
+		if (species.id === 'comfey' && role === 'Bulky Setup') return 'Triage';
+		if (species.id === 'lucario' && role === 'Fast Attacker') return 'Steadfast';
+		if (species.id === 'articuno') return 'Gale Wings';
+		if (species.id === 'landorus' && !teamDetails.sand) return 'Cloud Nine';
+		if (species.id === 'chesnaught') return 'Seed Sower';
+		if (species.id === 'pyroar' && !teamDetails.sand) return 'Supreme Overlord';
+		if (species.id === 'ironvaliant' && role === 'Fast Bulky Setup') return 'Outclass';
+		if (species.id === 'torkoal') return 'Drought';
+		if (species.id === 'screamtail') return 'Cute Charm';
+		if (species.id === 'milotic' && role === 'Setup Sweeper') return 'Sheer Heart';
+		if (species.id === 'froslass' && moves.has('nastyplot')) return 'Death Aura';
 		
 		// singles
 		if (!isDoubles) {
@@ -1328,8 +1345,8 @@ export class RandomTeams {
 				(species.id === 'ironthorns' && ability === 'Quark Drive') || 
 				(species.id === 'ironbundle' && ability === 'Neuron Drive') || 
 				(species.id === 'ironleaves' && ability === 'Quark Drive') || 
-				(species.id === 'ironcrown' && ability === 'Quark Drive') || 
-				(species.id === 'ironboulder' && ability === 'Quark Drive') || 
+				(species.id === 'ironcrown' && ability === 'Quark Drive' && !moves.has('voltswitch')) || 
+				(species.id === 'ironboulder' && ability === 'Quark Drive' && role !== 'Fast Attacker') || 
 				(species.id === 'gougingfire' && ability === 'Protosynthesis' && !teamDetails.sun) || 
 				(species.id === 'ragingbolt' && ability === 'Protosynthesis' && !teamDetails.sun)
 			) {
@@ -1358,10 +1375,12 @@ export class RandomTeams {
 		if (species.id === 'spiritomb' && role !== 'Wallbreaker') return 'Odd Keystone';
 		if (species.id === 'charizard' && role === 'Fast Attacker') return 'Charizardite Shard Y';
 		if (species.id === 'charizard' && role === 'Setup Sweeper') return 'Charizardite Shard X';
-		if (species.id === 'hippowdon' && this.randomChance(1, 2)) return 'Walkie-Talkie';
+		if (species.id === 'ironboulder' && role === 'Fast Attacker') return 'Razor Claw';
+		if (species.id === 'hippowdon' && moves.has('roar')) return 'Walkie-Talkie';
 		if (species.id === 'hydrapple' && role === 'Bulky Support' && this.randomChance(1, 2)) return 'Tera Shard';
+		if (species.id === 'milotic' && role === 'Setup Sweeper') return 'Life Orb';
 		if (
-			species.id === 'froslass' || moves.has('populationbomb') ||
+			moves.has('populationbomb') ||
 			(ability === 'Hustle' && counter.get('setup') && !isDoubles && this.randomChance(1, 2))
 		) return 'Wide Lens';
 		if (moves.has('clangoroussoul') || (species.id === 'toxtricity' && moves.has('shiftgear'))) return 'Throat Spray';
@@ -1377,7 +1396,7 @@ export class RandomTeams {
 		if (species.id === 'rampardos' && (role === 'Fast Attacker' || isDoubles)) return 'Choice Scarf';
 		if (
 			moves.has('courtchange') ||
-			!isDoubles && (species.id === 'luvdisc' || (species.id === 'terapagos' && !moves.has('rest')))
+			!isDoubles && (species.id === 'luvdisc' || (species.id === 'terapagos' && !moves.has('meteorbeam')))
 		) return 'Heavy-Duty Boots';
 		if (moves.has('bellydrum') && moves.has('substitute')) return 'Salac Berry';
 		if (
@@ -1393,6 +1412,7 @@ export class RandomTeams {
 		if (ability === 'Cud Chew') return 'Figy Berry';
 		if (species.id === 'klefki' && role === 'Bulky Setup') return 'Kee Berry';
 		if (species.id === 'landorus' && role === 'Fast Bulky Setup') return 'Lansat Berry';
+		if (species.id === 'talonflame' && role === 'Setup Sweeper') return 'Apicot Berry';
 		if (['healingwish', 'switcheroo', 'trick'].some(m => moves.has(m))) {
 			if (
 				species.baseStats.spe >= 60 && species.baseStats.spe <= 108 &&
@@ -1439,8 +1459,8 @@ export class RandomTeams {
 			return 'Chesto Berry';
 		}
 		if (
-			species.id !== 'yanmega' && ability !== 'Smelt' &&
-			this.dex.getEffectiveness('Rock', species) >= 2 && (!types.includes('Flying') || !isDoubles)
+			species.id !== 'yanmega' && 
+			this.dex.getEffectiveness('Rock', species) >= 2 && ability !== 'Smelt' && (!types.includes('Flying') || !isDoubles)
 		) return 'Heavy-Duty Boots';
 	}
 

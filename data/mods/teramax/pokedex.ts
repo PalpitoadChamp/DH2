@@ -58,11 +58,13 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	dudunsparce: {
 		inherit: true,
+		types: ["Normal", "Fairy"],
 		baseStats: {hp: 130, atk: 100, def: 80, spa: 90, spd: 80, spe: 55},
 		abilities: {0: "Serene Grace", 1: "Stamina", H: "Rattled"},
 	},
 	dudunsparcethreesegment: {
 		inherit: true,
+		types: ["Normal", "Fairy"],
 		baseStats: {hp: 130, atk: 100, def: 80, spa: 90, spd: 80, spe: 55},
 		abilities: {0: "Serene Grace", 1: "Stamina", H: "Rattled"},
 	},
@@ -87,12 +89,12 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	brutebonnet: {
 		inherit: true,
-		types: ["Poison", "Ghost"],
-		baseStats: {hp: 111, atk: 127, def: 89, spa: 79, spd: 99, spe: 65},
+		types: ["Poison", "Dragon"],
+		baseStats: {hp: 111, atk: 127, def: 99, spa: 79, spd: 99, spe: 55},
 	},
 	slitherwing: {
 		inherit: true,
-		baseStats: {hp: 97, atk: 139, def: 121, spa: 69, spd: 81, spe: 63},
+		baseStats: {hp: 85, atk: 135, def: 79, spa: 85, spd: 105, spe: 81},
 	},
 	ironjugulis: {
 		inherit: true,
@@ -133,11 +135,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	talonflame: {
 		inherit: true,
-		baseStats: {hp: 83, atk: 81, def: 81, spa: 84, spd: 79, spe: 126},
+		baseStats: {hp: 88, atk: 91, def: 81, spa: 74, spd: 77, spe: 126},
 	},
 	grafaiai: {
 		inherit: true,
-		baseStats: {hp: 73, atk: 95, def: 75, spa: 80, spd: 82, spe: 110},
+		baseStats: {hp: 73, atk: 95, def: 80, spa: 70, spd: 87, spe: 110},
 		abilities: {0: "Unburden", 1: "Corrosion", H: "Prankster"},
 	},
 	gastrodon: {
@@ -152,6 +154,85 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		inherit: true,
 		types: ["Fighting", "Flying"],
 		baseStats: {hp: 85, atk: 109, def: 81, spa: 50, spd: 60, spe: 100},
+	},
+	ogerpon: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 110, def: 84, spa: 50, spd: 96, spe: 130},
+		abilities: {0: "Defiant", H: "Skill Link"},
+	},
+	ogerpontealtera: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 110, def: 84, spa: 50, spd: 96, spe: 130},
+	},
+	ogerponhearthflame: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 95, def: 80, spa: 105, spd: 90, spe: 110},
+		abilities: {0: "Mold Breaker", H: "Merciless"},
+	},
+	ogerponhearthflametera: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 95, def: 80, spa: 105, spd: 90, spe: 110},
+	},
+	ogerponwellspring: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 120, def: 94, spa: 50, spd: 101, spe: 105},
+		abilities: {0: "Water Absorb", H: "Flower Veil"},
+	},
+	ogerponwellspringtera: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 120, def: 94, spa: 50, spd: 101, spe: 105},
+	},
+	ogerponcornerstone: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 120, def: 104, spa: 40, spd: 96, spe: 110},
+		abilities: {0: "Sturdy", H: "Sand Rush"},
+	},
+	ogerponcornerstonetera: {
+		inherit: true,
+		baseStats: {hp: 80, atk: 120, def: 104, spa: 40, spd: 96, spe: 110},
+	},
+	sinistcha: {
+		inherit: true,
+		baseStats: {hp: 71, atk: 60, def: 120, spa: 116, spd: 85, spe: 76},
+	},
+	slowbrogalar: {
+		inherit: true,
+		baseStats: {hp: 95, atk: 90, def: 110, spa: 110, spd: 75, spe: 30},
+		abilities: {0: "Quick Draw", 1: "Corrosion", H: "Regenerator"},
+	},
+	hydrapple: {
+		inherit: true,
+		types: ["Dragon", "Grass"],
+		baseStats: {hp: 121, atk: 80, def: 120, spa: 120, spd: 80, spe: 54},
+		abilities: {0: "Supersweet Syrup", 1: "Storm Drain", H: "Regenerator"},
+	},
+	calyrex: {
+		inherit: true,
+		baseStats: {hp: 110, atk: 80, def: 85, spa: 80, spd: 85, spe: 110},
+		abilities: {0: "Unnerve", H: "Contrary"},
+	},
+	glastrier: {
+		inherit: true,
+		abilities: {0: "Chilling Neigh", H: "Solid Rock"},
+	},
+	spectrier: {
+		inherit: true,
+		baseStats: {hp: 100, atk: 85, def: 80, spa: 100, spd: 95, spe: 120},
+		abilities: {0: "Grim Neigh", H: "Unaware"},
+	},
+	okidogi: {
+		inherit: true,
+		baseStats: {hp: 88, atk: 128, def: 115, spa: 63, spd: 101, spe: 85},
+		abilities: {0: "Toxic Chain", 1: "Iron Fist", H: "Guard Dog"},
+	},
+	munkidori: {
+		inherit: true,
+		baseStats: {hp: 88, atk: 65, def: 70, spa: 135, spd: 91, spe: 131},
+		abilities: {0: "Toxic Chain", 1: "Dazzling", H: "Neutralizing Gas"},
+	},
+	fezandipiti: {
+		inherit: true,
+		baseStats: {hp: 88, atk: 76, def: 95, spa: 95, spd: 127, spe: 99},
 	},
 
 // GMaxes and Buffs to GMax base forms
@@ -340,7 +421,7 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	appletungmax: {
 		inherit: true,
 		baseStats: {hp: 110, atk: 75, def: 90, spa: 120, spd: 100, spe: 25},
-		abilities: {0: "Marvel Scale"},
+		abilities: {0: "Grassy Surge"},
 		weightkg: 999.9,
 	},
 	sandaconda: {
@@ -416,11 +497,11 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 	},
 	copperajah: {
 		inherit: true,
-		baseStats: {hp: 122, atk: 130, def: 69, spa: 80, spd: 94, spe: 30},
+		baseStats: {hp: 122, atk: 130, def: 84, spa: 80, spd: 94, spe: 30},
 	},
 	copperajahgmax: {
 		inherit: true,
-		baseStats: {hp: 122, atk: 130, def: 69, spa: 80, spd: 94, spe: 30},
+		baseStats: {hp: 122, atk: 130, def: 84, spa: 80, spd: 94, spe: 30},
 		abilities: {0: "Bulletproof"},
 		weightkg: 999.9,
 	},
@@ -435,14 +516,28 @@ export const Pokedex: import('../../../sim/dex-species').ModdedSpeciesDataTable 
 		abilities: {0: "Unaware"},
 		weightkg: 999.9,
 	},
+	urshifu: {
+		inherit: true,
+		types: ["Dark", "Fighting"],
+		baseStats: {hp: 100, atk: 120, def: 100, spa: 73, spd: 60, spe: 97},
+	},
 	urshifugmax: {
 		inherit: true,
-		abilities: {0: "Inner Focus"},
+		types: ["Dark", "Fighting"],
+		baseStats: {hp: 100, atk: 120, def: 100, spa: 73, spd: 60, spe: 97},
+		abilities: {0: "Iron Fist"},
 		weightkg: 999.9,
+	},
+	urshifurapidstrike: {
+		inherit: true,
+		types: ["Water", "Fighting"],
+		baseStats: {hp: 100, atk: 120, def: 100, spa: 73, spd: 60, spe: 97},
 	},
 	urshifurapidstrikegmax: {
 		inherit: true,
-		abilities: {0: "Inner Focus"},
+		types: ["Water", "Fighting"],
+		baseStats: {hp: 100, atk: 120, def: 100, spa: 73, spd: 60, spe: 97},
+		abilities: {0: "Iron Fist"},
 		weightkg: 999.9,
 	},
 };

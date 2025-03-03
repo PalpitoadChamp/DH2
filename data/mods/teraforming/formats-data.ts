@@ -27,6 +27,54 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 	metagrosstera: {
 		tier: "Tera",
 	},
+	mabosstifftera: {
+		tier: "Tera",
+	},
+	pawmottera: {
+		tier: "Tera",
+	},
+	hydrappletera: {
+		tier: "Tera",
+	},
+	flygontera: {
+		tier: "Tera",
+	},
+	clodsiretera: {
+		tier: "Tera",
+	},
+	ironleavestera: {
+		tier: "Tera",
+	},
+	weezinggalartera: {
+		tier: "Tera",
+	},
+	volcaniontera: {
+		tier: "Tera",
+	},
+	meowscaradatera: {
+		tier: "Tera",
+	},
+	okidogitera: {
+		tier: "Tera",
+	},
+	munkidoritera: {
+		tier: "Tera",
+	},
+	fezandipititera: {
+		tier: "Tera",
+	},
+	terapagosstellar: {
+		tier: "Uber",
+	},
+	diancietera: {
+		tier: "Tera",
+	},
+	basculegionftera: {
+		tier: "Tera",
+	},
+	kleavortera: {
+		tier: "Tera",
+	},
 	
 	// Other
 	bulbasaur: {
@@ -5671,11 +5719,6 @@ export const FormatsData: import('../../../sim/dex-species').ModdedSpeciesFormat
 		tier: "OU",
 		doublesTier: "DUber",
 		natDexTier: "OU",
-	},
-	terapagosstellar: {
-		tier: "Uber",
-		doublesTier: "DUber",
-		natDexTier: "Uber",
 	},
 	pecharunt: {
 		tier: "OU",

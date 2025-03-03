@@ -297,7 +297,182 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			if (pokemon.getStat('atk', false, true) > pokemon.getStat('spa', false, true)) move.category = 'Physical';
 		},
 	},
+	eeriespell: {
+		num: 826,
+		accuracy: 100,
+		basePower: 80,
+		category: "Special",
+		shortDesc: "Traps the foe. Removes 3 PP from the target's last move.",
+		name: "Eerie Spell",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, sound: 1, bypasssub: 1, metronome: 1},
+		secondary: {
+			chance: 100,
+			onHit(target, source, move) {
+				if (!target.hp) return;
+				let foeMove: Move | ActiveMove | null = target.lastMove;
+				if (!foeMove || move.isZ) return;
+				if (foeMove.isMax && foeMove.baseMove) foeMove = this.dex.moves.get(foeMove.baseMove);
+
+				if (source.isActive) target.addVolatile('trapped', source, move, 'trapper');
+				const ppDeducted = target.deductPP(foeMove.id, 3);
+				if (!ppDeducted) return;
+				this.add('-activate', target, 'move: Eerie Spell', foeMove.name, ppDeducted);
+			},
+		},
+		target: "normal",
+		type: "Psychic",
+	},
+	shellsidearm: {
+		num: 801,
+		accuracy: 100,
+		basePower: 85,
+		category: "Special",
+		shortDesc: "Targets physical Defense if it would be stronger.",
+		name: "Shell Side Arm",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1},
+		onPrepareHit(target, source, move) {
+			if (!source.isAlly(target)) {
+				this.attrLastMove('[anim] Shell Side Arm ' + move.category);
+			}
+		},
+		onModifyMove(move, pokemon, target) {
+			if (!target) return;
+			const def = target.getStat('def', false, true);
+			const spd = target.getStat('spd', false, true);
+			if (def > spd || (def === spd && this.random(2) === 0)) {
+				move.overrideDefensiveStat = 'def';
+				//move.flags.contact = 1;
+			}
+		},
+		/*onHit(target, source, move) {
+			// Shell Side Arm normally reveals its category via animation on cart, but doesn't play either custom animation against allies
+			if (!source.isAlly(target)) this.hint(move.category + " Shell Side Arm");
+		},
+		onAfterSubDamage(damage, target, source, move) {
+			if (!source.isAlly(target)) this.hint(move.category + " Shell Side Arm");
+		},*/
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+	},
+	syrupbomb: {
+		num: 903,
+		accuracy: 100,
+		basePower: 85,
+		category: "Special",
+		shortDesc: "100% chance to lower the target's Attack by 1.",
+		name: "Syrup Bomb",
+		pp: 10,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1, bullet: 1},
+		condition: {
+			noCopy: true,
+			duration: 4,
+			onStart(pokemon) {
+				this.add('-start', pokemon, 'Syrup Bomb');
+			},
+			onUpdate(pokemon) {
+				if (this.effectState.source && !this.effectState.source.isActive) {
+					pokemon.removeVolatile('syrupbomb');
+				}
+			},
+			onResidualOrder: 14,
+			onResidual(pokemon) {
+				this.boost({spe: -1}, pokemon, this.effectState.source);
+			},
+			onEnd(pokemon) {
+				this.add('-end', pokemon, 'Syrup Bomb', '[silent]');
+			},
+		},
+		secondary: {
+			chance: 100,
+			boosts: {
+				atk: -1,
+			},
+		},
+		target: "normal",
+		type: "Grass",
+	},
+	ruthlessfist: {
+		accuracy: 100,
+		basePower: 90,
+		category: "Physical",
+		shortDesc: "Always crits against poisoned foes.",
+		name: "Ruthless Fist",
+		pp: 10,
+		priority: 0,
+		flags: {contact: 1, protect: 1, mirror: 1, punch: 1, metronome: 1},
+		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Power Trip", target);
+		},
+		onModifyMove(move, pokemon, target) {
+			if (target.status === 'psn' || target.status === 'tox') {
+				move.willCrit = true;
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+		contestType: "Tough",
+	},
+	neurotoxin: {
+		accuracy: 100,
+		basePower: 100,
+		category: "Special",
+		shortDesc: "Replaces the foe's PSN with PAR. High crit ratio.",
+		name: "Neurotoxin",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1},
+		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Psychic", target);
+			this.add('-anim', source, "Corrosive Gas", target);
+		},
+		onHit(target, source, move) {
+			if (target.status === 'psn' || target.status === 'tox') {
+				target.cureStatus();
+				target.trySetStatus('par', source);
+			}
+		},
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+		contestType: "Tough",
+	},
+	perniciousplume: {
+		accuracy: 100,
+		basePower: 25,
+		category: "Special",
+		shortDesc: "Hits 2-5 times. Heals 50% of damage dealt to PSN'd foes.",
+		name: "Pernicious Plume",
+		pp: 5,
+		priority: 0,
+		flags: {protect: 1, mirror: 1, metronome: 1},
+		onPrepareHit(target, source, move) {
+			this.attrLastMove('[still]');
+			this.add('-anim', source, "Feather Dance", target);
+		},
+		onModifyMove(move, pokemon, target) {
+			if (target.status === 'psn' || target.status === 'tox') {
+				move.drain = [1, 2];
+			}
+		},
+		multihit: [2, 5],
+		secondary: null,
+		target: "normal",
+		type: "Poison",
+		zMove: {basePower: 140},
+		maxMove: {basePower: 130},
+		contestType: "Cool",
+	},
 	
+	// dynamax stuff
 	grassknot: {
 		inherit: true,
 		desc: "This move's power is 20 if the target weighs less than 10 kg, 40 if less than 25 kg, 60 if less than 50 kg, 80 if less than 100 kg, 100 if less than 200 kg, and 120 if greater than or equal to 200 kg or if the target is Dynamax or Gigantamax.",
@@ -783,15 +958,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	gmaxoneblow: {
 		num: 1000,
 		accuracy: true,
-		basePower: 130,
+		basePower: 105,
 		category: "Physical",
 		isNonstandard: "Gigantamax",
-		desc: "This move bypasses all protection effects, including Max Guard.",
-		shortDesc: "Bypasses protection, including Max Guard.",
+		desc: "This move bypasses all protection effects, except Max Guard.",
+		shortDesc: "Bypasses protection, except Max Guard.",
 		name: "G-Max One Blow",
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: {punch: 1},
 		isMax: "Urshifu",
 		secondary: null,
 		target: "adjacentFoe",
@@ -801,15 +976,15 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 	gmaxrapidflow: {
 		num: 1000,
 		accuracy: true,
-		basePower: 45,
+		basePower: 35,
 		category: "Physical",
 		isNonstandard: "Gigantamax",
-		desc: "Hits 3 times. This move bypasses all protection effects, including Max Guard.",
-		shortDesc: "Hits 3 times. Bypasses protection, including Max Guard.",
+		desc: "Hits 3 times. This move bypasses all protection effects, except Max Guard.",
+		shortDesc: "Hits 3 times. Bypasses protection, except Max Guard.",
 		name: "G-Max Rapid Flow",
 		pp: 5,
 		priority: 0,
-		flags: {},
+		flags: {punch: 1},
 		multihit: 3,
 		isMax: "Urshifu-Rapid-Strike",
 		secondary: null,
@@ -1400,7 +1575,7 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 			onTryHitPriority: 3,
 			onTryHit(target, source, move) {
 				const bypassesMaxGuard = [
-					'acupressure', 'afteryou', 'allyswitch', 'aromatherapy', 'aromaticmist', 'coaching', 'confide', 'copycat', 'curse', 'decorate', 'doomdesire', 'feint', 'futuresight', 'gmaxoneblow', 'gmaxrapidflow', 'healbell', 'holdhands', 'howl', 'junglehealing', 'lifedew', 'meanlook', 'perishsong', 'playnice', 'powertrick', 'roar', 'roleplay', 'tearfullook',
+					'acupressure', 'afteryou', 'allyswitch', 'aromatherapy', 'aromaticmist', 'coaching', 'confide', 'copycat', 'curse', 'decorate', 'doomdesire', 'feint', 'futuresight', 'healbell', 'holdhands', 'howl', 'junglehealing', 'lifedew', 'meanlook', 'perishsong', 'playnice', 'powertrick', 'roar', 'roleplay', 'tearfullook',
 				];
 				if (bypassesMaxGuard.includes(move.id)) return;
 				if (move.smartTarget) {
@@ -1531,6 +1706,14 @@ export const Moves: import('../../../sim/dex-moves').ModdedMoveDataTable = {
 				this.add('-end', pokemon, 'Powder');
 			},
 		},
+	},
+	kingsshield: {
+		inherit: true,
+		isNonstandard: null,
+	},
+	needlearm: { // this got dexited????????????????
+		inherit: true,
+		isNonstandard: null,
 	},
 
 	/*

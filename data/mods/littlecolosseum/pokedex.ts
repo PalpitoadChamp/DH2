@@ -13,12 +13,12 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	slugma: {
 		inherit: true,
 		baseStats: {hp: 30, atk: 40, def: 40, spa: 80, spd: 30, spe: 40},
-		abilities: {0: "Flame Body", 1: "Weak Armor", H: "Hazard Absorb"},
+		abilities: {0: "Flame Body", 1: "Weak Armor", H: "Magmatic Entrance"},
 	},
 	sprigatito: {
 		inherit: true,
 		baseStats: {hp: 40, atk: 65, def: 54, spa: 31, spd: 45, spe: 75},
-		abilities: {0: "Overgrow", H: "Protean (Gen 7)"},
+		abilities: {0: "Overgrow", H: "Entertainer"},
 	},
 	dreepy: {
 		inherit: true,
@@ -90,5 +90,34 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	cetoddle: {
 		inherit: true,
 		abilities: {0: "Thick Fat", 1: "Sheer Force", H: "Sliding Whale"},
+	},
+	eevee: {
+		inherit: true,
+		baseStats: {hp: 60, atk: 55, def: 50, spa: 45, spd: 65, spe: 55},
+		abilities: {0: "Run Away", 1: "Supreme Survivor", H: "Anticipation"},
+	},
+	dratini: {
+		inherit: true,
+		baseStats: {hp: 61, atk: 50, def: 55, spa: 64, spd: 50, spe: 50},
+	},
+	bramblin: {
+		inherit: true,
+		baseStats: {hp: 50, atk: 65, def: 40, spa: 45, spd: 45, spe: 60},
+		abilities: {0: "Wind Rider", H: "Momentum Mori"},
+	},
+	meowth: {
+		inherit: true,
+		baseStats: {hp: 40, atk: 45, def: 35, spa: 50, spd: 50, spe: 90},
+		abilities: {0: "Pickup", 1: "Technician", H: "Seven Lives"},
+	},
+	tyrogue: {
+		inherit: true,
+		baseStats: {hp: 85, atk: 85, def: 45, spa: 35, spd: 45, spe: 45},
+		abilities: {0: "Guts", 1: "Iron Fist", H: "Scrappy"},
+	},
+	flittle: {
+		inherit: true,
+		types: ["Psychic", "Flying"],
+		abilities: {0: "Keen Eye", 1: "Frisk", H: "Speed Boost"},
 	},
 };

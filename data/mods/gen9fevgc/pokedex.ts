@@ -418,7 +418,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 	revarantis: {
 		num: 2047,
 		name: "Revarantis",
-		types: ["Steel", "Grass"],
+		types: ["Poison", "Grass"],
 		baseStats: {hp: 75, atk: 112, def: 90, spa: 87, spd: 78, spe: 67},
 		abilities: {0: "Leaf Coat", H: "Unfiltered"},
 		weightkg: 69.3,
@@ -932,7 +932,7 @@ export const Pokedex: {[speciesid: string]: ModdedSpeciesData} = {
 		num: 2075,
 		name: "Gloopinbell",
 		types: ["Grass", "Poison"],
-		baseStats: {hp: 75, atk: 110, def: 115, spa: 35, spd: 60, spe: 75},
+		baseStats: {hp: 62, atk: 85, def: 60, spa: 85, spd: 60, spe: 47},
 		abilities: {0: "Quick Delivery", H: "Durian Breath"},
 		weightkg: 7.5,
 		evos: ["Victreevile"],

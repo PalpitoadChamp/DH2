@@ -62,6 +62,37 @@ export const Scripts: ModdedBattleScriptsData = {
 		this.modData("Learnsets", "mareep").learnset.gigadrain = ["9L1"];
 		this.modData("Learnsets", "mareep").learnset.worryseed = ["9L1"];
 		this.modData("Learnsets", "mareep").learnset.slackoff = ["9L1"];
+		this.modData("Learnsets", "eevee").learnset.muddywater = ["9L1"];
+		this.modData("Learnsets", "eevee").learnset.voltswitch = ["9L1"];
+		this.modData("Learnsets", "eevee").learnset.flamewheel = ["9L1"];
+		this.modData("Learnsets", "eevee").learnset.psyshock = ["9L1"];
+		this.modData("Learnsets", "eevee").learnset.bulletseed = ["9L1"];
+		this.modData("Learnsets", "eevee").learnset.icywind = ["9L1"];
+		this.modData("Learnsets", "dratini").learnset.coilmind = ["9L1"];
+		this.modData("Learnsets", "bramblin").learnset.rockblast = ["9L1"];
+		this.modData("Learnsets", "meowth").learnset.counter = ["9L1"];
+		delete this.modData('Learnsets', 'meowth').learnset.knockoff;
+		delete this.modData('Learnsets', 'meowth').learnset.assurance;
+		delete this.modData('Learnsets', 'meowth').learnset.thunderwave;
+		delete this.modData('Learnsets', 'meowth').learnset.bodyslam;
+		delete this.modData('Learnsets', 'meowth').learnset.throatchop;
+		delete this.modData('Learnsets', 'meowth').learnset.hypnosis;
+		this.modData("Learnsets", "tyrogue").learnset.closecombat = ["9L1"];
+		this.modData("Learnsets", "tyrogue").learnset.ironhead = ["9L1"];
+		this.modData("Learnsets", "tyrogue").learnset.poisonjab = ["9L1"];
+		this.modData("Learnsets", "tyrogue").learnset.firepunch = ["9L1"];
+		this.modData("Learnsets", "tyrogue").learnset.icepunch = ["9L1"];
+		this.modData("Learnsets", "tyrogue").learnset.thunderpunch = ["9L1"];
+		this.modData("Learnsets", "tyrogue").learnset.triplekick = ["9L1"];
+		this.modData("Learnsets", "flittle").learnset.teleport = ["9L1"];
+		this.modData("Learnsets", "flittle").learnset.psychicnoise = ["9L1"];
+		this.modData("Learnsets", "flittle").learnset.aircutter = ["9L1"];
+		this.modData("Learnsets", "flittle").learnset.gust = ["9L1"];
+		delete this.modData('Learnsets', 'flittle').learnset.protect;
+		delete this.modData('Learnsets', 'flittle').learnset.hypnosis;
+		delete this.modData('Learnsets', 'flittle').learnset.psychic;
+		delete this.modData('Learnsets', 'flittle').learnset.psyshock;
+		delete this.modData('Learnsets', 'flittle').learnset.storedpower;
 	},
 	pokemon: { 
 		runImmunity(type: string, message?: string | boolean) {
