@@ -115,7 +115,31 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData; } = {
 	},
 	anticipation: {
 		inherit: true,
-		onAnySwitchIn(pokemon) {
+		onSwitchIn(pokemon) {
+			for (const target of pokemon.foes()) {
+				for (const moveSlot of target.moveSlots) {
+					const move = this.dex.moves.get(moveSlot.move);
+					if (!pokemon.hasAbility('anticipation')) return;
+					if (move.category === 'Status') continue;
+					const moveType = move.id === 'hiddenpower' ? target.hpType : move.type;
+					if (
+						this.dex.getImmunity(moveType, pokemon) && this.dex.getEffectiveness(moveType, pokemon) > 0 ||
+						move.ohko
+					) {
+						const sourceDef = pokemon.storedStats.def;
+						const sourceSpD = pokemon.storedStats.spd;
+						if (sourceDef >= sourceSpD) {
+							this.boost({ def: 1 }, pokemon);
+						}
+						else {
+							this.boost({ spd: 1 }, pokemon);
+						}
+						return;
+					}
+				}
+			}
+		},
+		onFoeSwitchIn(pokemon) {
 			for (const target of pokemon.foes()) {
 				for (const moveSlot of target.moveSlots) {
 					const move = this.dex.moves.get(moveSlot.move);
@@ -440,13 +464,13 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData; } = {
 		},
 		rating: 3,
 	},
-	indancesce: {
+	incandesce: {
 		num: -8,
-		name: "Indancesce",
+		name: "Incandesce",
 		shortDesc: "On switch in, adds Fire type to the user. Has no effect if the user is Fire-type.",
 		onStart(pokemon) {
 			if (pokemon.addType('Fire')) {
-				this.add('-start', pokemon, 'typeadd', 'Fire', '[from] ability: Indancesce');
+				this.add('-start', pokemon, 'typeadd', 'Fire', '[from] ability: Incandesce');
 			}
 		},
 		rating: 3,
@@ -531,6 +555,10 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData; } = {
 	// Slate 5
 	moody: {
 		inherit: true,
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Moody');
+			this.add('-message', `This Pokemon is feeling moody!`);
+		},
 		onModifyAtkPriority: 5,
 		onModifyAtk(atk, pokemon) {
 			const natPlus = pokemon.getNature().plus;
@@ -657,6 +685,15 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData; } = {
 	},
 	pyre: {
 		onStart(pokemon) {
+			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
+			if (target.side.totalFainted) {
+				this.add('-activate', pokemon, 'ability: Pyre');
+				const fallen = Math.min(target.side.totalFainted, 5);
+				this.add('-start', pokemon, `fallen${fallen}`, '[silent]');
+				this.effectState.fallen = fallen;
+			}
+		},
+		onResidual(pokemon) {
 			const target = pokemon.side.foe.active[pokemon.side.foe.active.length - 1 - pokemon.position];
 			if (target.side.totalFainted) {
 				this.add('-activate', pokemon, 'ability: Pyre');
@@ -893,7 +930,7 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData; } = {
 		rating: 3.5,
 		num: -17,
 		desc: "If this Pokemon has a non-volatile status condition, its Sp. Attack is multiplied by 1.5. This Pokemon's special attacks ignore the frostbite effect of halving damage.",
-		shortDesc: "If this Pokemon is statused, its Sp. Atk is 1.5x; ignores frostbite halving physical damage.",
+		shortDesc: "If this Pokemon is statused, its Sp. Atk is 1.5x; ignores frostbite halving special damage.",
 	},
 	cottondown: {
 		inherit: true,
@@ -950,6 +987,243 @@ export const Abilities: { [abilityid: string]: ModdedAbilityData; } = {
 			}
 		},
 		shortDesc: "Non-Ice: Lose Ice weakness. If Ice: Lose Ice weaknesses; Water-type moves = Ice-type.",
+	},
+	gulpmissile: {
+		inherit: true,
+		onSourceModifyDamage(damage, source, target, move) {
+			const currentForme = source.species.id;
+			if (currentForme === 'cramorantgulping' || currentForme === 'cramorantgorging') {
+				return this.chainModify(0.67);
+			}
+		},
+		onDamagingHit(damage, target, source, move) {
+			if (!source.hp || !source.isActive || target.isSemiInvulnerable()) return;
+			if (['cramorantgulping', 'cramorantgorging'].includes(target.species.id)) {
+				this.damage(source.baseMaxhp / 4, source, target);
+				if (target.species.id === 'cramorantgulping') {
+					this.boost({def: -1, spd: -1}, source, target, null, true);
+				} else {
+					this.boost({spe: -2}, source, target, null, true);
+				}
+				target.formeChange('cramorant', move);
+			}
+		},
+		// The Dive part of this mechanic is implemented in Dive's `onTryMove` in moves.ts
+		onSourceTryPrimaryHit(target, source, effect) {
+			if (effect?.effectType === 'Move' && (effect?.type === 'Water' || effect?.type === 'Flying') && source.hasAbility('gulpmissile') && source.species.name === 'Cramorant') {
+				const forme = source.hp <= source.maxhp / 2 ? 'cramorantgorging' : 'cramorantgulping';
+				source.formeChange(forme, effect);
+				this.heal(source.baseMaxhp / 8);
+			}
+		},
+		shortDesc: "Cramorant: 1/3 less damage in Gulping/Gourging, +1/8 max HP if uses a Water-/Flying-type move. Arrokuda = -1 Def/-SpD, Pikachu = -2 Spe.",
+	},
+	northernmist: {
+		onStart(pokemon) {
+			this.add('-ability', pokemon, 'Northern Mist');
+			pokemon.side.addSideCondition('mist');
+		},
+		self: {
+			sideCondition: 'mist',
+		},
+		onSourceModifyDamage(damage, source, target, move) {
+			if (target.side.sideConditions['mist'] && !move.flags['contact']) {
+				return this.chainModify(0.33);
+			}
+		},
+		onModifySecondaries(secondaries) {
+			const pokemon = this.effectState.target;
+			if (pokemon.side.sideConditions['mist']) {
+				this.debug('Shield Dust prevent secondary');
+				return secondaries.filter(effect => !!(effect.self || effect.dustproof));
+			}
+		},
+		name: "Northern Mist",
+		shortDesc: "On switch in, creates mist. When the user is under Mist the user is immune to secondary effects and takes 2/3 damage from non contact moves",
+	},
+	lifestealer: {
+		onResidualOrder: 8,
+		onResidual(pokemon) {
+			if (this.effectState.stage < 15) {
+				this.effectState.stage++;
+			}
+			for (const target of this.getAllActive()) {
+				if (pokemon.volatiles['lifestealer']) {
+					const damage = this.damage(this.clampIntRange(pokemon.baseMaxhp / 16, 1) * this.effectState.stage, pokemon, target,); //'[silent]'); //looking at that soon
+					if (damage) {
+						this.heal(damage * 2 / 3, target, pokemon);
+					}
+				}
+				if (!target || target.fainted || target.hp <= 0) {
+					this.debug('Nothing to leech into');
+					return;
+				}
+			}
+		},
+		onModifyMovePriority: 5,
+		onModifyMove(move) {
+			move.drain = [2, 3];
+		},
+		flags: {},
+		name: "Life Stealer",
+		rating: 3.5,
+		num: -19,
+		desc: "Whenever an opposing Pokemon takes damage, this Pokemon heals for 2/3 of the damage taken. If this Pokemon tries to drain the health of an opponent with the Liquid Ooze ability, it will take damage instead.",
+		shortDesc: "This Pokemon heals for 2/3 of the damage dealt to opponents.",
+	},
+	// Slate 10
+	galewings: {
+		inherit: true,
+		onModifyPriority(priority, pokemon, target, move) {
+			if (move && move.type === 'Flying') return priority + 1;
+		},
+		rating: 4,
+		shortDesc: "This Pokemon's Flying-type moves have their priority increased by 1.",
+	},
+	snowflurry: {
+		onUpdate(pokemon) {
+			if (pokemon.status === 'frz') {
+				this.add('-activate', pokemon, 'ability: Snow Flurry');
+				pokemon.cureStatus();
+			}
+		},
+		onBasePowerPriority: 21,
+		onBasePower(basePower, attacker, defender, move) {
+			if (this.field.isWeather('snow')) {
+				if (move.type === 'Ice' || move.type === 'Ghost' || move.type === 'Fairy') {
+					this.debug('Snow Flurry boost');
+					return this.chainModify([5325, 4096]);
+				}
+			}
+			else if (move.type === 'Ice' || move.type === 'Ghost' || move.type === 'Fairy') {
+				this.debug('Snow Flurry boost');
+				return this.chainModify([4915, 4096]);
+			}
+		},
+		flags: {},
+		shortDesc: "This Pokemon's Ice/Ghost/Fairy attacks do 1.2x, 1.3x in Snow; immunity to Frst.",
+		desc: "This Pokemon's Ice, Ghost, and Fairy attacks have 1.2x power. If Snow is active, this Pokemon's Ice, Ghost, and Fairy attacks instead have 1.3x power and ignore user's Burn. Frostbite immunity.",
+		name: "Snow Flurry",
+		rating: 3,
+		num: -20,
+	},
+	slushrush: {
+		inherit: true,
+		onUpdate(pokemon) {
+			if (pokemon.status === 'frz' || pokemon.status === 'brn') {
+				this.add('-activate', pokemon, 'ability: Slush Rush');
+				pokemon.cureStatus();
+			}
+		},
+		shortDesc: "This Pokemon cannot be burned and frostbitten. If Hail Snow is active, this Pokemon's speed is doubled.",
+		desc: "This Pokemon cannot be burned and frostbitten. If Hail Snow is active, this Pokemon's speed is doubled.",
+	},
+	lightpower: {
+		onModifySpAPriority: 5,
+		onModifySpA(spa) {
+			return this.chainModify(2);
+		},
+		name: "Light Power",
+		shortDesc: "This Pokemon's Special Attack is doubled.",
+		rating: 5,
+		num: -21,
+	},
+	cosmicenergy: {
+		desc: "This Pokémon can skip the charging turn of its moves.",
+		shortDesc: "Skip charging turns of moves.",
+		onChargeMove(pokemon, target, move) {
+			this.debug('Solar Core - remove charge turn for ' + move.id);
+			this.attrLastMove('[still]');
+			this.addMove('-anim', pokemon, move.name, target);
+			return false; 
+		},
+		name: "Cosmic Energy",
+		rating: 2,
+		num: -22,
+	},
+	rattled: {
+		inherit: true,
+		onSourceModifyAtkPriority: 6,
+		onSourceModifyAtk(atk, attacker, defender, move) {
+			if (move.type === 'Bug' || move.type === 'Ghost' || move.type === 'Dark') {
+				this.debug('Rattled weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		onSourceModifySpAPriority: 5,
+		onSourceModifySpA(atk, attacker, defender, move) {
+			if (move.type === 'Bug' || move.type === 'Ghost' || move.type === 'Dark') {
+				this.debug('Rattled weaken');
+				return this.chainModify(0.5);
+			}
+		},
+		flags: {breakable: 1},
+		desc: "Bug/Ghost/Dark resistances. This Pokemon's Speed is raised by 1 stage if hit by a Bug-, Dark-, or Ghost-type attack, or if an opposing Pokemon affected this Pokemon with the Intimidate Ability.",
+		shortDesc: "Bug/Ghost/Dark resistances. Speed is raised 1 stage if hit by a Bug-, Dark-, or Ghost-type attack, or Intimidated.",
+	},
+	savage: {
+		shortDesc: "The Pokémon’s Attack or Special Attack copies from the higher stat (held items does not apply for which is higher). Stat stages and held items apply as normal.",
+		onModifyAtkPriority: 5,
+		onModifyAtk(atk, pokemon) {
+			const currentatk = pokemon.storedStats.atk;
+			const currentspa = pokemon.storedStats.spa;
+			if (currentspa > currentatk) return currentspa;
+		},
+		onModifySpAPriority: 5,
+		onModifySpA(spa, pokemon) {
+			const currentatk = pokemon.storedStats.atk;
+			const currentspa = pokemon.storedStats.spa;
+			if (currentatk > currentspa) return currentatk;
+		},
+		flags: {},
+		name: "Savage",
+		rating: 4,
+		num: -24,
+	},
+	pickup: {
+		onResidualOrder: 28,
+		onResidualSubOrder: 2,
+		onResidual(pokemon) {
+			if (pokemon.item) return;
+			const pickupTargets = this.getAllActive().filter(target => (
+				target.lastItem && target.usedItemThisTurn && pokemon === target
+			));
+			if (!pickupTargets.length) return;
+			const randomTarget = this.sample(pickupTargets);
+			const item = randomTarget.lastItem;
+			randomTarget.lastItem = '';
+			this.add('-item', pokemon, this.dex.items.get(item), '[from] ability: Pickup');
+			pokemon.setItem(item);
+		},
+		flags: {},
+		name: "Pickup",
+		rating: 0.5,
+		num: 53,
+	},
+	resourceful: {
+		//WIP
+		num: -25,
+		name: "Resourceful",
+		rating: 4,
+		onEatItem(pokemon) {
+			if (pokemon.shieldBoost) return;
+			pokemon.shieldBoost = true;
+			pokemon.setItem(pokemon.lastItem);
+			pokemon.lastItem = '';
+			this.add('-item', pokemon, pokemon.getItem(), '[from] ability: Resourceful');
+		},
+		onAfterUseItem(pokemon) {
+			if (pokemon.swordBoost) return;
+			pokemon.swordBoost = true;
+			this.actions.runEvent('UseItem', this, null, null, pokemon.getItem())
+		},
+		onResidualOrder: 28,
+		onResidualSubOrder: 4,
+		onResidual(pokemon) {
+			pokemon.swordBoost = false;
+		},
+		desc: "If this Pokémon's item would trigger, it triggers again. Once per battle, if this Pokémon's item would be consumed, it isn't.",
+		shortDesc: "Items trigger twice, and can avoid being consumed once.",
 	},
 	// Legend Plate + Tera Blast field
 	normalize: {

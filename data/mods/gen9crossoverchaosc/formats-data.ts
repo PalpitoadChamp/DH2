@@ -35,4 +35,52 @@ export const FormatsData: {[k: string]: SpeciesFormatsData} = {
 		tier: "CC OU",
 		doublesTier: "DCC OU",
 	},
+	wrigglenightbug: {
+		tier: "CC OU",
+		doublesTier: "DCC OU",
+	},
+	roy: {
+		tier: "CC OU",
+		doublesTier: "DCC OU",
+	},
+	berdly: {
+		tier: "CC OU",
+		doublesTier: "DCC OU",
+	},
+	jackfrost: {
+		tier: "CC OU",
+		doublesTier: "DCC OU",
+	},
+	mermaid: {
+		tier: "CC OU",
+		doublesTier: "DCC OU",
+	},
+	ana: {
+		tier: "CC OU",
+		doublesTier: "DCC OU",
+	},
+	mawjaw: {
+		tier: "CC OU",
+		doublesTier: "DCC OU",
+	},
+	amingo: {
+		tier: "CC OU",
+		doublesTier: "DCC OU",
+	},
+	susie: {
+		tier: "CC OU",
+		doublesTier: "DCC OU",
+	},
+	scout: {
+		tier: "CC OU",
+		doublesTier: "DCC OU",
+	},
+	metaknight: {
+		tier: "CC OU",
+		doublesTier: "DCC OU",
+	},
+	hornet: {
+		tier: "CC OU",
+		doublesTier: "DCC OU",
+	},
 };
